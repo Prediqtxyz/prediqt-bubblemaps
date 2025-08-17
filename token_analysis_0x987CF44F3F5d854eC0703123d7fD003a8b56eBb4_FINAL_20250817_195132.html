@@ -1,0 +1,1440 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Prediqt Bubblemap - Unknown</title>
+            <link rel="icon" type="image/png" href="https://backend.prediqt.xyz/11111.png">
+            <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+            <style>
+                :root {
+                    --bg-900: #04060A;
+                    --bg-800: #0B1118;
+                    --bg-700: #1a2332;
+                    --bg-600: #2a3342;
+                    --card-800: #0F1622;
+                    --text-100: #E6F0FF;
+                    --text-300: #B8C5D6;
+                    --text-400: #93A0B4;
+                    --line: #223044;
+                    --cyan: #34D6FF;
+                    --green: #2EE6A0;
+                    --red: #FF6B6B;
+                    --purple: #7A5CFF;
+                    --bronze: #E59A3B;
+                }
+                
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+                
+                html, body {
+                    background: 
+                        radial-gradient(ellipse at top, #1a2332 0%, #0f1419 25%, #04060A 100%),
+                        linear-gradient(135deg, #04060A 0%, #0B1118 50%, #04060A 100%);
+                    color: var(--text-100);
+                    font-family: "Exo 2", system-ui, sans-serif;
+                    font-size: 14px;
+                    line-height: 1.6;
+                    overflow: hidden;
+                    height: 100vh;
+                    margin: 0;
+                    padding: 0;
+                }
+                
+                /* Starfield Background */
+                .starfield {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-image: 
+                        radial-gradient(1px 1px at 25px 25px, rgba(255,255,255,0.8), transparent),
+                        radial-gradient(1px 1px at 50px 50px, rgba(255,255,255,0.6), transparent),
+                        radial-gradient(1px 1px at 75px 75px, rgba(255,255,255,0.4), transparent),
+                        radial-gradient(1px 1px at 100px 100px, rgba(255,255,255,0.3), transparent),
+                        radial-gradient(1px 1px at 125px 125px, rgba(255,255,255,0.2), transparent),
+                        radial-gradient(1px 1px at 150px 150px, rgba(255,255,255,0.1), transparent);
+                    background-repeat: repeat;
+                    background-size: 150px 150px;
+                    animation: twinkle 30s linear infinite;
+                    z-index: -1;
+                    opacity: 0.6;
+                }
+                
+                @keyframes twinkle {
+                    0% { transform: translateY(0px); }
+                    100% { transform: translateY(-150px); }
+                }
+                
+                /* Header with branding */
+                .header {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.1)),
+                                var(--card-800);
+                    border-bottom: 1px solid var(--line);
+                    padding: 16px 24px;
+                    z-index: 1000;
+                    backdrop-filter: blur(15px);
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                
+                .logo {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+                
+                .logo-img {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 8px;
+                }
+                
+                .logo-text {
+                    font-family: "Orbitron", system-ui, sans-serif;
+                    font-size: 24px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.03em;
+                    color: var(--text-100);
+                    text-shadow: 0 0 20px rgba(230, 240, 255, 0.3);
+                }
+                
+                .header-controls {
+                    display: flex;
+                    gap: 16px;
+                    align-items: center;
+                }
+                
+                .reset-button {
+                    background: linear-gradient(135deg, var(--cyan), var(--purple));
+                    border: 1px solid var(--cyan);
+                    color: var(--bg-900);
+                    font-family: "Orbitron", system-ui, sans-serif;
+                    font-size: 12px;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    cursor: pointer;
+                    padding: 8px 16px;
+                    border-radius: 8px;
+                    transition: all 0.2s ease;
+                    opacity: 0.9;
+                    line-height: 1;
+                }
+                
+                .reset-button:hover {
+                    background: linear-gradient(135deg, var(--text-100), var(--cyan));
+                    border-color: var(--text-100);
+                    opacity: 1;
+                    transform: scale(1.05);
+                    box-shadow: 0 0 15px rgba(52, 214, 255, 0.4);
+                }
+                
+
+                
+                /* Token Analysis Section styles */
+                .token-analysis-section {
+                    background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.1)),
+                                var(--card-800);
+                    border: 1px solid var(--line);
+                    border-radius: 10px;
+                    padding: 15px;
+                    margin-bottom: 20px;
+                    backdrop-filter: blur(10px);
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                    transition: all 0.3s ease;
+                }
+                
+                .token-analysis-header {
+                    margin-bottom: 15px;
+                    border-bottom: 1px solid var(--line);
+                    padding-bottom: 10px;
+                }
+                
+                .token-analysis-header h3 {
+                    font-size: 1.2em;
+                    font-weight: bold;
+                    margin: 0;
+                    color: var(--text-100);
+                    text-shadow: 0 0 10px rgba(230, 240, 255, 0.3);
+                    font-family: "Orbitron", system-ui, sans-serif;
+                    text-transform: uppercase;
+                    letter-spacing: 0.02em;
+                }
+                
+                .token-analysis-content {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                }
+                
+                .token-header-main {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+                
+                .token-image-main {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 8px;
+                    object-fit: cover;
+                    border: 1px solid var(--line);
+                }
+                
+                .token-text-info-main {
+                    flex: 1;
+                }
+                
+                .token-name-main {
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: var(--text-100);
+                    margin-bottom: 4px;
+                }
+                
+                .token-symbol-main {
+                    font-size: 14px;
+                    color: var(--cyan);
+                    font-weight: 500;
+                }
+                
+                .token-metrics-main {
+                    margin-top: 15px;
+                }
+                
+                .metrics-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 8px;
+                }
+                
+                .metric-item-main {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    padding: 6px 8px;
+                    border: 1px solid rgba(255,255,255,0.1);
+                    border-radius: 6px;
+                    background: rgba(255,255,255,0.02);
+                    font-size: 12px;
+                }
+                
+                .metric-label-main {
+                    color: var(--text-400);
+                    font-weight: 500;
+                }
+                
+                .metric-value-main {
+                    color: var(--text-100);
+                    font-weight: 600;
+                }
+                
+                .token-links-main {
+                    display: flex;
+                    gap: 8px;
+                    flex-wrap: wrap;
+                    margin-top: 8px;
+                }
+                
+                .token-link-main {
+                    color: var(--cyan);
+                    text-decoration: none;
+                    font-size: 11px;
+                    padding: 4px 8px;
+                    border: 1px solid var(--cyan);
+                    border-radius: 4px;
+                    transition: all 0.2s ease;
+                }
+                .token-link-main:hover {
+                    background: var(--cyan);
+                    color: var(--bg-900);
+                }
+                
+                /* Holdings Section styles */
+                .holdings-section {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                }
+                
+                #bubble-chart {
+                    width: 100vw;
+                    height: 100vh;
+                    position: relative;
+                    background: transparent;
+                    overflow: hidden;
+                    cursor: grab;
+                    margin-top: 80px;
+                }
+                #bubble-chart:active {
+                    cursor: grabbing;
+                }
+                
+                .bubble {
+                    position: absolute;
+                    border-radius: 50%;
+                    border: 2px solid rgba(255,255,255,0.35);
+                    cursor: grab;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+                    user-select: none;
+                    touch-action: none;
+                    will-change: left, top;
+                    transform: translateZ(0);
+                }
+                .bubble:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+                    z-index: 1000;
+                }
+                .bubble:active {
+                    cursor: grabbing;
+                }
+                .bubble.dragging {
+                    z-index: 1001;
+                    box-shadow: 0 12px 24px rgba(0,0,0,0.6);
+                }
+                
+                .tooltip {
+                    position: absolute;
+                    background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.1)),
+                                var(--card-800);
+                    color: var(--text-100);
+                    padding: 12px;
+                    border-radius: 8px;
+                    font-size: 12px;
+                    pointer-events: none;
+                    z-index: 1001;
+                    border: 1px solid var(--line);
+                    display: none;
+                    font-family: "Exo 2", system-ui, sans-serif;
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+                }
+                
+                .connection {
+                    position: absolute;
+                    height: 4px;
+                    background: rgba(255,255,255,0.8);
+                    transform-origin: left center;
+                    pointer-events: none;
+                    border-radius: 2px;
+                    box-shadow: 0 0 8px rgba(255,255,255,0.3);
+                }
+                
+                .legend {
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.1)),
+                                var(--card-800);
+                    border: 1px solid var(--line);
+                    border-radius: 10px;
+                    padding: 15px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    z-index: 1000;
+                    backdrop-filter: blur(10px);
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                }
+                
+                .legend-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 12px;
+                    color: var(--text-100);
+                    font-family: "Exo 2", system-ui, sans-serif;
+                }
+                
+                .legend-color {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    border: 1px solid rgba(255,255,255,0.3);
+                }
+                
+                /* Mobile Warning */
+                .mobile-warning {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.9);
+                    z-index: 10000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    backdrop-filter: blur(10px);
+                }
+                
+                .mobile-warning-content {
+                    background: var(--card-800);
+                    border: 1px solid var(--line);
+                    border-radius: 12px;
+                    padding: 30px;
+                    max-width: 400px;
+                    text-align: center;
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+                }
+                
+                .mobile-warning-content h3 {
+                    color: var(--text-100);
+                    margin: 0 0 15px 0;
+                    font-size: 18px;
+                    font-weight: 600;
+                }
+                
+                .mobile-warning-content p {
+                    color: var(--text-300);
+                    margin: 0 0 20px 0;
+                    line-height: 1.5;
+                    font-size: 14px;
+                }
+                
+                .mobile-warning-content button {
+                    background: var(--accent);
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    font-weight: 500;
+                    transition: background 0.2s;
+                }
+                
+                .mobile-warning-content button:hover {
+                    background: var(--accent-hover);
+                }
+                
+                /* Footer */
+                .footer {
+                    position: fixed;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    background: linear-gradient(180deg, rgba(0,0,0,.1), rgba(255,255,255,.03)),
+                                var(--card-800);
+                    padding: 12px 24px;
+                    z-index: 1000;
+                    backdrop-filter: blur(15px);
+                    box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    font-family: "Exo 2", system-ui, sans-serif;
+                    font-size: 12px;
+                    color: var(--text-400);
+                }
+                
+                .footer-left {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                }
+                
+                .footer-right {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                }
+                
+                .footer-link {
+                    color: var(--text-300);
+                    text-decoration: none;
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+                
+                .footer-link:hover {
+                    color: var(--cyan);
+                    text-shadow: 0 0 8px rgba(52, 214, 255, 0.4);
+                }
+                
+                /* Custom scrollbar for webkit browsers */
+                ::-webkit-scrollbar {
+                    width: 12px;
+                }
+                
+                ::-webkit-scrollbar-track {
+                    background: var(--bg-900);
+                    border-radius: 6px;
+                }
+                
+                ::-webkit-scrollbar-thumb {
+                    background: linear-gradient(135deg, var(--cyan), var(--purple));
+                    border-radius: 6px;
+                    border: 2px solid var(--bg-900);
+                }
+                
+                ::-webkit-scrollbar-thumb:hover {
+                    background: linear-gradient(135deg, var(--purple), var(--cyan));
+                    transform: scale(1.05);
+                }
+                
+                ::-webkit-scrollbar-corner {
+                    background: var(--bg-900);
+                }
+                
+                /* Firefox scrollbar */
+                * {
+                    scrollbar-width: thin;
+                    scrollbar-color: var(--cyan) var(--bg-900);
+                }
+                
+                .footer-separator {
+                    width: 1px;
+                    height: 16px;
+                    background: var(--line);
+                }
+                
+                /* Make chart infinite scroll */
+                #bubble-chart {
+                    width: 100vw;
+                    height: calc(100vh - 160px); /* 80px header + 80px footer */
+                    position: relative;
+                    background: transparent;
+                    overflow: hidden;
+                    cursor: grab;
+                    margin-top: 80px;
+                }
+                
+                /* Infinite canvas for bubbles */
+                .bubble-canvas {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 10000px;
+                    height: 10000px;
+                    transform-origin: center;
+                    background: transparent;
+                }
+                
+                /* Sidebar for holder details */
+                .sidebar {
+                    position: fixed;
+                    top: 80px;
+                    right: 0;
+                    width: 320px;
+                    height: calc(100vh - 160px);
+                    background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.1)),
+                                var(--card-800);
+                    border-left: 1px solid var(--line);
+                    z-index: 1000;
+                    backdrop-filter: blur(15px);
+                    box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+                    overflow-y: auto;
+                    padding: 20px;
+                    font-family: "Exo 2", system-ui, sans-serif;
+                    display: flex;
+                    flex-direction: column;
+                }
+                
+                .sidebar-header {
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: var(--text-100);
+                    margin-bottom: 20px;
+                    padding-bottom: 10px;
+                    border-bottom: 1px solid var(--line);
+                }
+                
+                .holder-item {
+                    background: rgba(255,255,255,.03);
+                    border: 1px solid var(--line);
+                    border-radius: 8px;
+                    padding: 12px;
+                    margin-bottom: 10px;
+                    transition: all 0.2s ease;
+                }
+                
+                .holder-item:hover {
+                    background: rgba(255,255,255,.05);
+                    border-color: var(--cyan);
+                    transform: translateX(-2px);
+                }
+                
+                .holder-address {
+                    font-family: monospace;
+                    font-size: 11px;
+                    color: var(--text-300);
+                    margin-bottom: 4px;
+                }
+                
+                .address-link {
+                    color: var(--cyan);
+                    text-decoration: none;
+                    transition: all 0.2s ease;
+                }
+                
+                .address-link:hover {
+                    color: var(--text-100);
+                    text-shadow: 0 0 8px rgba(52, 214, 255, 0.4);
+                }
+                
+                .holder-percentage {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: var(--text-100);
+                    margin-bottom: 2px;
+                }
+                
+                .holder-quantity {
+                    font-size: 12px;
+                    color: var(--text-400);
+                }
+                
+                .holder-value {
+                    font-size: 11px;
+                    color: var(--cyan);
+                    font-weight: 600;
+                    margin-top: 2px;
+                }
+                
+                .holder-cluster {
+                    font-size: 10px;
+                    color: var(--text-400);
+                    margin-top: 1px;
+                    font-style: italic;
+                }
+                
+                .cluster-indicator {
+                    display: inline-block;
+                    background: var(--cyan);
+                    color: var(--bg-900);
+                    font-size: 10px;
+                    font-weight: 600;
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                    margin-left: 8px;
+                }
+                
+                .whale-indicator {
+                    display: inline-block;
+                    background: #ffd700;
+                    color: #000;
+                    font-size: 10px;
+                    font-weight: 600;
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                    margin-left: 8px;
+                }
+                
+                /* Token info section */
+                .token-info {
+                    background: rgba(255,255,255,.03);
+                    border: 1px solid var(--line);
+                    border-radius: 8px;
+                    padding: 15px;
+                    margin-bottom: 20px;
+                }
+                
+                .token-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin-bottom: 15px;
+                }
+                
+                .token-image {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 8px;
+                    object-fit: cover;
+                    border: 1px solid var(--line);
+                }
+                
+                .token-text-info {
+                    flex: 1;
+                }
+                
+                .token-name {
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: var(--text-100);
+                    margin-bottom: 4px;
+                }
+                
+                .token-symbol {
+                    font-size: 14px;
+                    color: var(--cyan);
+                    font-weight: 500;
+                }
+                
+                .token-metrics {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 8px;
+                    margin-bottom: 15px;
+                }
+                
+                .metric-item {
+                    background: rgba(0,0,0,.2);
+                    padding: 8px;
+                    border-radius: 4px;
+                    text-align: center;
+                }
+                
+                .metric-label {
+                    font-size: 10px;
+                    color: var(--text-400);
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+                
+                .metric-value {
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: var(--text-100);
+                    margin-top: 2px;
+                }
+                
+                .token-links {
+                    display: flex;
+                    gap: 10px;
+                    flex-wrap: wrap;
+                }
+                
+                .token-link {
+                    color: var(--cyan);
+                    text-decoration: none;
+                    font-size: 12px;
+                    padding: 4px 8px;
+                    border: 1px solid var(--cyan);
+                    border-radius: 4px;
+                    transition: all 0.2s ease;
+                }
+                
+                .token-link:hover {
+                    background: var(--cyan);
+                    color: var(--bg-900);
+                 }
+             </style>
+        </head>
+        <body>
+            <!-- Starfield background -->
+            <div class="starfield"></div>
+            
+            <!-- Header with branding -->
+            <div class="header">
+                <div class="logo">
+                    <img src="https://backend.prediqt.xyz/11111.png" alt="Prediqt Logo" class="logo-img">
+                    <div class="logo-text">Prediqt Bubblemaps</div>
+                </div>
+                <div class="header-controls">
+                    <button class="reset-button" id="resetButton">Reset View</button>
+                </div>
+                </div>
+                
+                <!-- Mobile Warning -->
+                <div class="mobile-warning" id="mobileWarning" style="display: none;">
+                    <div class="mobile-warning-content">
+                        <h3>Mobile Device Detected</h3>
+                        <p>This interactive bubble map is optimized for desktop viewing. Please switch to a desktop or laptop for the best experience.</p>
+                        <button onclick="document.getElementById('mobileWarning').style.display='none'">Continue Anyway</button>
+                    </div>
+                </div>
+                
+            <div id="bubble-chart">
+                </div>
+                
+            <div class="tooltip" id="tooltip"></div>
+            
+            
+            <!-- Sidebar -->
+            <div class="sidebar" id="sidebar">
+                <!-- Token Analysis Section -->
+                <div class="token-analysis-section">
+                    <div class="token-analysis-header">
+                        <h3>Token Analysis</h3>
+                    </div>
+                    <div class="token-analysis-content">
+                        <div class="token-header-main">
+                            <img class="token-image-main" id="tokenImageMain" src="https://cdn.dexscreener.com/cms/images/AZcVZPFVy3JOjeuW?width=64&height=64&quality=90" alt="Token" onerror="this.style.display='none'">
+                            <div class="token-text-info-main">
+                                <div class="token-name-main" id="tokenNameMain">Loading...</div>
+                                <div class="token-symbol-main" id="tokenSymbolMain">Loading...</div>
+                            </div>
+                        </div>
+                        <div class="token-metrics-main" id="tokenMetricsMain">
+                            <div class="metrics-grid">
+                                <div class="metric-item-main">
+                                    <span class="metric-label-main">Market Cap:</span>
+                                    <span class="metric-value-main" id="marketCapMain">Loading...</span>
+                                </div>
+                                <div class="metric-item-main">
+                                    <span class="metric-label-main">Price USD:</span>
+                                    <span class="metric-value-main" id="priceUsdMain">Loading...</span>
+                                </div>
+                                <div class="metric-item-main">
+                                    <span class="metric-label-main">24h Volume:</span>
+                                    <span class="metric-value-main" id="volume24hMain">Loading...</span>
+                                </div>
+                                <div class="metric-item-main">
+                                    <span class="metric-label-main">Total Value:</span>
+                                    <span class="metric-value-main" id="totalUSDValueMain">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="token-links-main" id="tokenLinksMain">
+                            <!-- Links will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Token Holdings Section -->
+                <div class="holdings-section">
+                    <div class="sidebar-header" id="holdingsHeader">Loading...</div>
+                    <div id="holdersList">
+                        <!-- Holders will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="footer">
+                <div class="footer-left">
+                    <span>Prediqt Bubblemaps</span>
+                </div>
+                <div class="footer-right">
+                    <a href="https://docs.prediqt.xyz/" class="footer-link" target="_blank">
+                        <span>Docs</span>
+                    </a>
+                    <div class="footer-separator"></div>
+                    <a href="https://discord.gg/ccPbHafnmf" class="footer-link" target="_blank">
+                        <span>Discord</span>
+                    </a>
+                    <div class="footer-separator"></div>
+                    <a href="https://x.com/prediqtxyz" class="footer-link" target="_blank">
+                        <span>X/Twitter</span>
+                    </a>
+                </div>
+            </div>
+                
+            <script>
+                // Mobile detection
+                function isMobile() {
+                    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+                }
+                
+                // Show mobile warning if on mobile device
+                if (isMobile()) {
+                    document.getElementById('mobileWarning').style.display = 'flex';
+                }
+                
+                const bubbles = [{"id": "0x6beac2bc91626e9e7a38a72ab54b42459dc5d0ef", "x": 610.3156056953865, "y": 356.4863829268503, "size": 15, "percentage": 0.9380244885285925, "quantity_eth": 9287628.199908784, "color": "#FF6B6B", "group": "Funded by 0x422c63...", "funding_address": "0x422c63dc43e8e98a73c608138fcb69c3ece1ee47", "index": 12, "is_whale": true, "whale_value": "258k", "rank": 13}, {"id": "0x228340bae43ce048f2c76ab353bd7a409a8a2635", "x": 630.143119840904, "y": 380.2600868791589, "size": 15, "percentage": 0.6256923835890092, "quantity_eth": 6195145.539755588, "color": "#FF6B6B", "group": "Funded by 0x422c63...", "funding_address": "0x422c63dc43e8e98a73c608138fcb69c3ece1ee47", "index": 22, "is_whale": false, "whale_value": "", "rank": 23}, {"id": "0x6f661b820141b6a27aae69b24115ecee2673a6c6", "x": 581.6555386453263, "y": 361.5728668930218, "size": 15, "percentage": 0.5029756430567277, "quantity_eth": 4980094.681375182, "color": "#FF6B6B", "group": "Funded by 0x422c63...", "funding_address": "0x422c63dc43e8e98a73c608138fcb69c3ece1ee47", "index": 34, "is_whale": false, "whale_value": "", "rank": 35}, {"id": "0xbb5d27a29488a4c0251d1af33e8ebb84740f9f43", "x": 599.8732343149542, "y": 328.71504602384516, "size": 15, "percentage": 0.14235839111369541, "quantity_eth": 1409528.0282876107, "color": "#FF6B6B", "group": "Funded by 0x422c63...", "funding_address": "0x422c63dc43e8e98a73c608138fcb69c3ece1ee47", "index": 131, "is_whale": false, "whale_value": "", "rank": 132}, {"id": "0xcb84fb2fa8f26bdf6c64fd3f62ee95005969cd29", "x": 641.2375979135903, "y": 348.2504617727026, "size": 15, "percentage": 0.12894447999571307, "quantity_eth": 1276713.3515984477, "color": "#FF6B6B", "group": "Funded by 0x422c63...", "funding_address": "0x422c63dc43e8e98a73c608138fcb69c3ece1ee47", "index": 150, "is_whale": false, "whale_value": "", "rank": 151}, {"id": "0x87a62b0b5f0dcd16a3d92fb19b188c9ff9f067c2", "x": 634.8822984464556, "y": 408.9040627161679, "size": 15, "percentage": 0.09083230075328391, "quantity_eth": 899354.5992195924, "color": "#FF6B6B", "group": "Funded by 0x422c63...", "funding_address": "0x422c63dc43e8e98a73c608138fcb69c3ece1ee47", "index": 208, "is_whale": false, "whale_value": "", "rank": 209}, {"id": "0x8c888da1cc64684bb53a6e2bb2e842263cd40cab", "x": 554.402075329205, "y": 329.4858764331376, "size": 15, "percentage": 0.5722913516769024, "quantity_eth": 5666407.819198738, "color": "#4ECDC4", "group": "Funded by 0x0649f2...", "funding_address": "0x0649f2daa72a6524f0eb7f5f65e13cffc8082b10", "index": 23, "is_whale": false, "whale_value": "", "rank": 24}, {"id": "0x2694a8838f50c20e7a6a95ee0625dec6c0b3b1a7", "x": 552.6425833480571, "y": 363.374871644033, "size": 15, "percentage": 0.3869694950935192, "quantity_eth": 3831487.172336739, "color": "#4ECDC4", "group": "Funded by 0x0649f2...", "funding_address": "0x0649f2daa72a6524f0eb7f5f65e13cffc8082b10", "index": 43, "is_whale": true, "whale_value": "37k", "rank": 44}, {"id": "0x14d8c4033c325c49e95216840513c55300758ee2", "x": 525.741893748963, "y": 334.4320405822083, "size": 15, "percentage": 0.22444792189089874, "quantity_eth": 2222318.1529458477, "color": "#4ECDC4", "group": "Funded by 0x0649f2...", "funding_address": "0x0649f2daa72a6524f0eb7f5f65e13cffc8082b10", "index": 86, "is_whale": false, "whale_value": "", "rank": 87}, {"id": "0x02b20e65539b6750aa65f9246ad03afa043040f4", "x": 540.9420229212601, "y": 303.6659622800447, "size": 15, "percentage": 0.16321924902287643, "quantity_eth": 1616076.8919484275, "color": "#4ECDC4", "group": "Funded by 0x0649f2...", "funding_address": "0x0649f2daa72a6524f0eb7f5f65e13cffc8082b10", "index": 112, "is_whale": false, "whale_value": "", "rank": 113}, {"id": "0xaa85028fed2ef89a4dcd751281c6be3b70049f41", "x": 576.6499092170538, "y": 309.5928741680594, "size": 15, "percentage": 0.1341687513274208, "quantity_eth": 1328440.2418211696, "color": "#4ECDC4", "group": "Funded by 0x0649f2...", "funding_address": "0x0649f2daa72a6524f0eb7f5f65e13cffc8082b10", "index": 142, "is_whale": false, "whale_value": "", "rank": 143}, {"id": "0x98e66bfd853764f7cc9da7dbfa7dc55516667c53", "x": 568.8131425836328, "y": 390.79511750688766, "size": 15, "percentage": 0.13348648478342373, "quantity_eth": 1321684.940577573, "color": "#4ECDC4", "group": "Funded by 0x0649f2...", "funding_address": "0x0649f2daa72a6524f0eb7f5f65e13cffc8082b10", "index": 144, "is_whale": false, "whale_value": "", "rank": 145}, {"id": "0xf2257c3d23263374ce3a1444999937e8fc23eb92", "x": 513.5379378537461, "y": 360.799130810692, "size": 15, "percentage": 0.13214444441338896, "quantity_eth": 1308397.044431383, "color": "#4ECDC4", "group": "Funded by 0x0649f2...", "funding_address": "0x0649f2daa72a6524f0eb7f5f65e13cffc8082b10", "index": 146, "is_whale": false, "whale_value": "", "rank": 147}, {"id": "0x06294a902b9d66c71472f27b50f1d706593a494b", "x": 532.5645694629661, "y": 274.6450241630358, "size": 15, "percentage": 0.10679781667386214, "quantity_eth": 1057433.388956365, "color": "#4ECDC4", "group": "Funded by 0x0649f2...", "funding_address": "0x0649f2daa72a6524f0eb7f5f65e13cffc8082b10", "index": 171, "is_whale": false, "whale_value": "", "rank": 172}, {"id": "0x9cdaf9494c8b9b91f5500f35d7da71570d997625", "x": 604.6506400749099, "y": 296.49243180463986, "size": 15, "percentage": 0.09748342193888147, "quantity_eth": 965209.106686946, "color": "#4ECDC4", "group": "Funded by 0x0649f2...", "funding_address": "0x0649f2daa72a6524f0eb7f5f65e13cffc8082b10", "index": 194, "is_whale": false, "whale_value": "", "rank": 195}, {"id": "0xb505f9c9d5f8645cbbea5804b7827b03f6aeb87c", "x": 599.4368186730396, "y": 387.3213889298804, "size": 15, "percentage": 0.09714286784453087, "quantity_eth": 961837.1906560047, "color": "#4ECDC4", "group": "Funded by 0x0649f2...", "funding_address": "0x0649f2daa72a6524f0eb7f5f65e13cffc8082b10", "index": 195, "is_whale": true, "whale_value": "133k", "rank": 196}, {"id": "0xbcad6b9ef6cdd203c945f750d70bed5f330519f9", "x": 687.5604295403377, "y": 448.7783942910167, "size": 30.31355471905648, "percentage": 2.0209036479370988, "quantity_eth": 20009500.753355876, "color": "#45B7D1", "group": "Funded by 0xac38f6...", "funding_address": "0xac38f6a6c7429e1682b5c8fb2b6ecbb90d88f491", "index": 1, "is_whale": false, "whale_value": "", "rank": 2}, {"id": "0x5455ac2700c753ff1e546cae49b52076ef9d3c58", "x": 558.8880920597146, "y": 218.26613561612373, "size": 30.26898752461436, "percentage": 2.0179325016409573, "quantity_eth": 19980082.649176758, "color": "#96CEB4", "group": "Funded by 0x451e29...", "funding_address": "0x451e29e4958bf698826ad026a6940dd33a21c1f8", "index": 2, "is_whale": true, "whale_value": "190k", "rank": 3}, {"id": "0x8a0c908d55eaabec0444d2b971d626f60cd7eb78", "x": 582.7244433270818, "y": 492.9599774120043, "size": 29.731052198376812, "percentage": 1.982070146558454, "quantity_eth": 19625000.000000007, "color": "#FFEAA7", "group": "Funded by 0x062515...", "funding_address": "0x06251573cf8742d93ba1ab25fbc4605243942367", "index": 3, "is_whale": true, "whale_value": "355k", "rank": 4}, {"id": "0xd17fc951befa64fe6b4bc9de67e65d3ca3477ff0", "x": 677.508920282573, "y": 221.57738798548849, "size": 21.494225166958564, "percentage": 1.4329483444639044, "quantity_eth": 14188000.010460166, "color": "#DDA0DD", "group": "Funded by 0xf2f625...", "funding_address": "0xf2f62549cf1263c8ae8bae768cc35958ac4d8c35", "index": 4, "is_whale": true, "whale_value": "175k", "rank": 5}, {"id": "0x58b4121ac609c43bf126b4cbe810edb39c7b6e15", "x": 517.7503567999422, "y": 406.877026939382, "size": 15, "percentage": 0.5376074375766838, "quantity_eth": 5322993.225422294, "color": "#98D8C8", "group": "Funded by 0x7df4e1...", "funding_address": "0x7df4e182da01eba2ff902b3f13b7a7b12bb87dea", "index": 25, "is_whale": false, "whale_value": "", "rank": 26}, {"id": "0xfb741b4ede29a0e4c1a41f4dd95fd6160e22d80f", "x": 535.6944653332837, "y": 430.86313156036977, "size": 15, "percentage": 0.3376177054858721, "quantity_eth": 3342842.069270246, "color": "#98D8C8", "group": "Funded by 0x7df4e1...", "funding_address": "0x7df4e182da01eba2ff902b3f13b7a7b12bb87dea", "index": 57, "is_whale": true, "whale_value": "38k", "rank": 58}, {"id": "0x8212ad287e4d0eba2317b33c0b9c4ff6a03703cb", "x": 491.6390090752359, "y": 420.069184592172, "size": 15, "percentage": 0.1531994059120361, "quantity_eth": 1516867.7789956525, "color": "#98D8C8", "group": "Funded by 0x7df4e1...", "funding_address": "0x7df4e182da01eba2ff902b3f13b7a7b12bb87dea", "index": 121, "is_whale": true, "whale_value": "69k", "rank": 122}, {"id": "0x5e7652dc99eff4f8a7ed6553e455b88af72a9fb5", "x": 494.99029985247813, "y": 386.11001740848224, "size": 15, "percentage": 0.11798782350878545, "quantity_eth": 1168228.6019899081, "color": "#98D8C8", "group": "Funded by 0x7df4e1...", "funding_address": "0x7df4e182da01eba2ff902b3f13b7a7b12bb87dea", "index": 160, "is_whale": true, "whale_value": "357k", "rank": 161}, {"id": "0xe4c92dfd2b82ff488ee4e0744e78959f8cc2c24c", "x": 567.2917599330503, "y": 421.6046997150261, "size": 15, "percentage": 0.10099720523140757, "quantity_eth": 1000000.0030815863, "color": "#98D8C8", "group": "Funded by 0x7df4e1...", "funding_address": "0x7df4e182da01eba2ff902b3f13b7a7b12bb87dea", "index": 186, "is_whale": true, "whale_value": "111k", "rank": 187}, {"id": "0x00511a982147832020b1b92682fbd4ad73484b43", "x": 526.4126507793684, "y": 458.8765494094626, "size": 15, "percentage": 0.07736667790245083, "quantity_eth": 766027.911006035, "color": "#98D8C8", "group": "Funded by 0x7df4e1...", "funding_address": "0x7df4e182da01eba2ff902b3f13b7a7b12bb87dea", "index": 243, "is_whale": false, "whale_value": "", "rank": 244}, {"id": "0x0efeeede5de0cbbd0aabf9bb366797e494ae4a10", "x": 708.1782986588975, "y": 330.0637089892233, "size": 15.149580738026394, "percentage": 1.0099720492017596, "quantity_eth": 10000000.0, "color": "#F7DC6F", "group": "Funded by 0x2aa4db...", "funding_address": "0x2aa4dbf8462b3eec6e8b8134b6ba8f8cd84fd1cb", "index": 9, "is_whale": false, "whale_value": "", "rank": 10}, {"id": "0xe3892813464f0b56e967233d03bc1918a47cea21", "x": 727.6712147245787, "y": 353.8941335497716, "size": 15, "percentage": 0.14764209352047802, "quantity_eth": 1461843.361280822, "color": "#F7DC6F", "group": "Funded by 0x2aa4db...", "funding_address": "0x2aa4dbf8462b3eec6e8b8134b6ba8f8cd84fd1cb", "index": 126, "is_whale": true, "whale_value": "30k", "rank": 127}, {"id": "0x034eeac590a123a48a4ee078a39b187a042f1058", "x": 436.83591205674645, "y": 309.98149920791343, "size": 15.510496353395686, "percentage": 1.034033090226379, "quantity_eth": 10238234.721878057, "color": "#BB8FCE", "group": "Funded by 0x627a6f...", "funding_address": "0x627a6f0c004aa40bc14451a8a123901ab5eb6861", "index": 7, "is_whale": true, "whale_value": "96k", "rank": 8}, {"id": "0xb07558298e69af5995d86da21b52b80336f1d54d", "x": 737.1078430738388, "y": 457.1328118161732, "size": 15, "percentage": 0.9594735319279886, "quantity_eth": 9500000.84345222, "color": "#85C1E9", "group": "Funded by 0xcbf175...", "funding_address": "0xcbf175b2eac6afb29adb294b33f0ac948bfa4a6f", "index": 11, "is_whale": false, "whale_value": "", "rank": 12}, {"id": "0xb2d77fe350edd06f23f48cc29b2432bc94d49d56", "x": 516.1221235739239, "y": 190.73763204619897, "size": 15, "percentage": 0.865942779990139, "quantity_eth": 8573928.166373957, "color": "#F8C471", "group": "Funded by 0xd22a3d...", "funding_address": "0xd22a3d81c8be60520a489d55f4e1cc6c3c081935", "index": 13, "is_whale": true, "whale_value": "231k", "rank": 14}, {"id": "0x374701cf0e216b770090b58866b61249ac45f4a2", "x": 611.5222700313874, "y": 535.642767953195, "size": 15, "percentage": 0.8342369126410802, "quantity_eth": 8260000.000004225, "color": "#82E0AA", "group": "Funded by 0xaeab9b...", "funding_address": "0xaeab9b650cd1e14b60a147b6f55f313e8d6644d5", "index": 15, "is_whale": true, "whale_value": "81k", "rank": 16}, {"id": "0x67cc48a94236f6e3299166d8ccf168b8d0013288", "x": 667.7761461710136, "y": 170.36037739350095, "size": 15, "percentage": 0.732229735671276, "quantity_eth": 7250000.000000003, "color": "#F1948A", "group": "Funded by 0x67cc48...", "funding_address": "0x67cc48a94236f6e3299166d8ccf168b8d0013288", "index": 16, "is_whale": true, "whale_value": "119k", "rank": 17}, {"id": "0xa8517c367347cee8c539023b3575a6d40c7518cc", "x": 460.2532288957391, "y": 490.2670309300561, "size": 15, "percentage": 0.7045652182027176, "quantity_eth": 6976086.30614656, "color": "#D7BDE2", "group": "Funded by 0x2c13d9...", "funding_address": "0x2c13d9e7802c521a6057b03b33e3bd3eec3b44fa", "index": 17, "is_whale": false, "whale_value": "", "rank": 18}, {"id": "0xba5f909ce03d382e3e6b32dc5429fbbd67126ba1", "x": 790.5981879916792, "y": 277.27909011646983, "size": 15, "percentage": 0.6548480941839077, "quantity_eth": 6483823.930587709, "color": "#A9CCE3", "group": "Funded by 0x42cca2...", "funding_address": "0x42cca279ba3b44bdee2d74c099bf6fb9ea4e5c26", "index": 20, "is_whale": false, "whale_value": "", "rank": 21}, {"id": "0x9701e00aba475062a4912ba44a779992025f1d86", "x": 390.3564328007053, "y": 337.7699251042849, "size": 15, "percentage": 0.6262799930030639, "quantity_eth": 6200963.6157559985, "color": "#FAD7A0", "group": "Funded by 0x9ff26d...", "funding_address": "0x9ff26d7e160a52064b328e38793e3569acbcae99", "index": 21, "is_whale": true, "whale_value": "84k", "rank": 22}, {"id": "0xa7aef386010bca577a85b197f021b2dffa2daf05", "x": 791.4875448115373, "y": 449.9425844275077, "size": 15, "percentage": 0.5340023012731475, "quantity_eth": 5287297.818738657, "color": "#ABEBC6", "group": "Funded by 0x1fae6b...", "funding_address": "0x1fae6bf228eb81167519cd5ec923f32262bb650c", "index": 26, "is_whale": false, "whale_value": "", "rank": 27}, {"id": "0x2c45670a267ce87488719d593a9a2f29d0de56e3", "x": 466.37599765651055, "y": 180.2925281618186, "size": 15, "percentage": 0.2221938508243871, "quantity_eth": 2200000.0, "color": "#FF6B6B", "group": "Funded by 0x4b79eb...", "funding_address": "0x4b79eb7d9ca579b7422c0d72882d98414008abe4", "index": 88, "is_whale": false, "whale_value": "", "rank": 89}, {"id": "0x749c0b3dd08fe34a0789907f8e8a77861f179f58", "x": 487.0343948036518, "y": 203.8887959050884, "size": 15, "percentage": 0.16159552787228154, "quantity_eth": 1600000.0, "color": "#FF6B6B", "group": "Funded by 0x4b79eb...", "funding_address": "0x4b79eb7d9ca579b7422c0d72882d98414008abe4", "index": 117, "is_whale": false, "whale_value": "", "rank": 118}, {"id": "0x034c3756fff9b5d39808b77402e328119f9fc575", "x": 437.72083064217003, "y": 185.74358809391782, "size": 15, "percentage": 0.13897215397016213, "quantity_eth": 1376000.0, "color": "#FF6B6B", "group": "Funded by 0x4b79eb...", "funding_address": "0x4b79eb7d9ca579b7422c0d72882d98414008abe4", "index": 135, "is_whale": false, "whale_value": "", "rank": 136}, {"id": "0x53b418d67487f11b6331f32b63da047f2bba4ab4", "x": 655.1332952951628, "y": 571.2336315976763, "size": 15, "percentage": 0.5183349750580105, "quantity_eth": 5132171.484029495, "color": "#4ECDC4", "group": "Funded by 0x301e49...", "funding_address": "0x301e496206ce3a4051666287b9273f3716747a8e", "index": 29, "is_whale": true, "whale_value": "157k", "rank": 30}, {"id": "0x33949d3cb30327df68e078e9fabd990fbe1a930a", "x": 641.5545043109136, "y": 119.71925140934107, "size": 15, "percentage": 0.5151499496600211, "quantity_eth": 5100635.706375978, "color": "#45B7D1", "group": "Funded by 0xc56ac0...", "funding_address": "0xc56ac0b7c160ab6051e6b32491071c75c7227d05", "index": 30, "is_whale": true, "whale_value": "54k", "rank": 31}, {"id": "0x702a0d6f6872fc07d5f7f761136eb460dc275e8c", "x": 464.22960227774945, "y": 547.9050254600471, "size": 15, "percentage": 0.5075553466992706, "quantity_eth": 5025439.536672539, "color": "#96CEB4", "group": "Funded by 0xe6ecef...", "funding_address": "0xe6ecefb950feb89498eec5303b47c1dbe9595f5c", "index": 32, "is_whale": true, "whale_value": "60k", "rank": 33}, {"id": "0x2455267eeae72087f0f31e1e063ef774dc8b3ab9", "x": 810.1392785503966, "y": 222.1036215902936, "size": 15, "percentage": 0.5060126652355135, "quantity_eth": 5010165.040066653, "color": "#FFEAA7", "group": "Funded by 0xdac58e...", "funding_address": "0xdac58ebc0bc7fbd4ae087fdd311b838b1c26ed0b", "index": 33, "is_whale": true, "whale_value": "88k", "rank": 34}, {"id": "0xa2cf2c40dfd63bd095e6df171a212c0783d52c06", "x": 349.93410810974706, "y": 381.1616705767248, "size": 15, "percentage": 0.47504392144683577, "quantity_eth": 4703535.3287478695, "color": "#DDA0DD", "group": "Funded by 0x57ef77...", "funding_address": "0x57ef77baa92a5d3cbb254fd29bca386535fb646b", "index": 35, "is_whale": false, "whale_value": "", "rank": 36}, {"id": "0x44ede98f6dfd3a6ef22326f827dcd22fa805020d", "x": 846.5689631723967, "y": 425.94568058875564, "size": 15, "percentage": 0.4435301988540374, "quantity_eth": 4391509.638356679, "color": "#98D8C8", "group": "Funded by 0x3c1c36...", "funding_address": "0x3c1c365b1b915a7f25bde25da0bcb4fd62ade403", "index": 36, "is_whale": true, "whale_value": "68k", "rank": 37}, {"id": "0xbb377f5884a0502e7ca27e8eeecc74e800ed2056", "x": 401.7938357913289, "y": 175.61446026208108, "size": 15, "percentage": 0.41410915295683104, "quantity_eth": 4100204.0926194526, "color": "#F7DC6F", "group": "Funded by 0x85bbcd...", "funding_address": "0x85bbcd588e0e7ad15dac3cc5578927f2e8f67e9d", "index": 40, "is_whale": false, "whale_value": "", "rank": 41}, {"id": "0x213ef0c815629f253e6cdaaf50f53760f979e2a2", "x": 711.6904752494306, "y": 595.8154546373281, "size": 15, "percentage": 0.4040945181900204, "quantity_eth": 4001046.5488564763, "color": "#BB8FCE", "group": "Funded by 0x7b304e...", "funding_address": "0x7b304e5fd582bc5ed67822457d3d171d3352d6e5", "index": 42, "is_whale": true, "whale_value": "38k", "rank": 43}, {"id": "0x1ff2c9755be438a5091dced335f537a5744d8935", "x": 598.9743990104279, "y": 74.00190554532776, "size": 15, "percentage": 0.38485040849235214, "quantity_eth": 3810505.5362326317, "color": "#85C1E9", "group": "Funded by 0x8babe5...", "funding_address": "0x8babe5d5d1e544959446f6ff82574ff7accbe07a", "index": 44, "is_whale": false, "whale_value": "", "rank": 45}, {"id": "0xfbb0fd8b835a9e65b85df7dd27c130a3e53ac15a", "x": 485.2567801529302, "y": 607.6004532199565, "size": 15, "percentage": 0.3777295944304727, "quantity_eth": 3740000.475547958, "color": "#F8C471", "group": "Funded by 0x1d82d9...", "funding_address": "0x1d82d9ca9d5b78c4da86c79bf27b8f3f7ebaaf67", "index": 45, "is_whale": false, "whale_value": "", "rank": 46}, {"id": "0xd15901c6ce8263c982ddc21ba7ebfeddc8b59ab0", "x": 814.8051109441036, "y": 158.15953421581943, "size": 15, "percentage": 0.3738583262964677, "quantity_eth": 3701670.027323528, "color": "#82E0AA", "group": "Funded by 0xe4b9a8...", "funding_address": "0xe4b9a82b5ce11aa0f6bd3f95de5ea6e635e483c2", "index": 47, "is_whale": true, "whale_value": "41k", "rank": 48}, {"id": "0x297d1e32b6675f63501eea13f74b52439df0a6f8", "x": 319.6769966209777, "y": 438.62851559495215, "size": 15, "percentage": 0.37368965820465105, "quantity_eth": 3700000.0, "color": "#F1948A", "group": "Funded by 0x8a0c90...", "funding_address": "0x8a0c908d55eaabec0444d2b971d626f60cd7eb78", "index": 48, "is_whale": true, "whale_value": "36k", "rank": 49}, {"id": "0xc70967ffe7ce3127a212131c273e78826a377b9b", "x": 897.964969633268, "y": 384.88376228914643, "size": 15, "percentage": 0.36975676207607405, "quantity_eth": 3661059.3567249174, "color": "#D7BDE2", "group": "Funded by 0xb6d57f...", "funding_address": "0xb6d57f1dc03495c9771f891a5e055834ad149611", "index": 49, "is_whale": true, "whale_value": "37k", "rank": 50}, {"id": "0xad327807c36a840f865f91a82b68c5bbfb23a357", "x": 337.4321216321451, "y": 192.85640563674463, "size": 15, "percentage": 0.34911879427965226, "quantity_eth": 3456717.3869374045, "color": "#A9CCE3", "group": "Funded by 0xad3278...", "funding_address": "0xad327807c36a840f865f91a82b68c5bbfb23a357", "index": 53, "is_whale": false, "whale_value": "", "rank": 54}, {"id": "0x9afcb38db465b0b378120da745013a7764ae07f0", "x": 778.4086806927535, "y": 605.9576969998581, "size": 15, "percentage": 0.34540820930804, "quantity_eth": 3419977.9051413992, "color": "#FAD7A0", "group": "Funded by 0xa28e34...", "funding_address": "0xa28e3439e7e83b05ddfd3526c916d6aaaa8490f9", "index": 54, "is_whale": false, "whale_value": "", "rank": 55}, {"id": "0x788dfe76903be7d756647bebb9083713c9ced88f", "x": 541.2042918418937, "y": 37.4826969555337, "size": 15, "percentage": 0.34172410960017896, "quantity_eth": 3383500.660936742, "color": "#ABEBC6", "group": "Funded by 0x7be89e...", "funding_address": "0x7be89e625332e3da8323dc69eb0856435e2b3860", "index": 56, "is_whale": true, "whale_value": "34k", "rank": 57}, {"id": "0x7244deff75eab02c8e87c9f980bf15ff754a64fc", "x": 523.991305587401, "y": 664.9582168696224, "size": 15, "percentage": 0.3175494973199904, "quantity_eth": 3144141.440062311, "color": "#FF6B6B", "group": "Funded by 0x0515b0...", "funding_address": "0x0515b0770ed0118ace03aaffb5f84a692609c75a", "index": 62, "is_whale": false, "whale_value": "", "rank": 63}, {"id": "0x66f778249f33ef1e7ba11ff9fb948405055641c8", "x": 802.2152509547133, "y": 89.21466244951125, "size": 15, "percentage": 0.3031138875406215, "quantity_eth": 3001210.6550888247, "color": "#4ECDC4", "group": "Funded by 0xd0e064...", "funding_address": "0xd0e064d765b859d6c0485208c28e9526ca595abd", "index": 66, "is_whale": false, "whale_value": "", "rank": 67}, {"id": "0x7d79d1c9449cef000915d1c3050cc9f24ed0b94f", "x": 303.29411218970523, "y": 507.6756675543337, "size": 15, "percentage": 0.3029921012138527, "quantity_eth": 3000004.816502845, "color": "#45B7D1", "group": "Funded by 0xf9ea52...", "funding_address": "0xf9ea52f22074521e6c76289528e545a5570c9645", "index": 67, "is_whale": false, "whale_value": "", "rank": 68}, {"id": "0x51a8953adf6431b7ddd8e49b9e4cab9de57c6658", "x": 941.2620708638506, "y": 327.54562426349196, "size": 15, "percentage": 0.27577718678553403, "quantity_eth": 2730542.7610942, "color": "#96CEB4", "group": "Funded by 0xa147cf...", "funding_address": "0xa147cf7f20a916d9a87b338ecb38292de5080274", "index": 73, "is_whale": false, "whale_value": "", "rank": 74}, {"id": "0xe1bed4686dd5736eec2e0be826bb46e3b8f8aff7", "x": 273.94894938735314, "y": 228.3664832606193, "size": 15, "percentage": 0.2726805614549879, "quantity_eth": 2699882.2558555305, "color": "#FFEAA7", "group": "Funded by 0x4788b8...", "funding_address": "0x4788b8182dfa8b828595fb9a59751a11374dd173", "index": 74, "is_whale": true, "whale_value": "35k", "rank": 75}, {"id": "0x472f4ee961f836f9de4fb302a3f07dbd6065eac9", "x": 851.7071478937655, "y": 598.9166762175367, "size": 15, "percentage": 0.2672539278610226, "quantity_eth": 2646151.723428872, "color": "#DDA0DD", "group": "Funded by 0xe96913...", "funding_address": "0xe9691329f4d42123d902b23755f2597fc9935e98", "index": 75, "is_whale": false, "whale_value": "", "rank": 76}, {"id": "0x90092c3cfbaaa0f2ebbd87523444c0a916ca9a0e", "x": 470.4200112207261, "y": 14.129449775716012, "size": 15, "percentage": 0.2526908278069127, "quantity_eth": 2501958.6235740795, "color": "#98D8C8", "group": "Funded by 0xbbe633...", "funding_address": "0xbbe633e7e25d2deac3d0df635af09fc68343032b", "index": 77, "is_whale": true, "whale_value": "82k", "rank": 78}, {"id": "0x7f8e32f12d99affa2e0bcc614b9f5aa1503a8708", "x": 573.5721253534903, "y": 691.3073266569199, "size": 15, "percentage": 0.2524977620220953, "quantity_eth": 2500047.0282485452, "color": "#F7DC6F", "group": "Funded by 0xe11aba...", "funding_address": "0xe11aba9a7c6aba907e65a458c37a5e25ad46f0ec", "index": 78, "is_whale": false, "whale_value": "", "rank": 79}, {"id": "0x596c4163856c2e7b3fc96dd38e4dcd2c3c4c05a4", "x": 770.8966916835681, "y": 19.578570955799705, "size": 15, "percentage": 0.24549304303330358, "quantity_eth": 2430691.4555440536, "color": "#BB8FCE", "group": "Funded by 0x3f3bbd...", "funding_address": "0x3f3bbde4e4aed27e423038e65af075200c57e765", "index": 80, "is_whale": false, "whale_value": "", "rank": 81}, {"id": "0xc5d30f5db230f0470e703e65e1a0e3fec98363bd", "x": 303.8829189029279, "y": 584.9439811583817, "size": 15, "percentage": 0.23322888178518375, "quantity_eth": 2309260.7559735766, "color": "#85C1E9", "group": "Funded by 0xf191d9...", "funding_address": "0xf191d9a381e525285787ee08df257023194784e0", "index": 83, "is_whale": true, "whale_value": "68k", "rank": 84}, {"id": "0xb5c6211aeed1fd04921992a77a87339549749619", "x": 972.2563904685434, "y": 255.75998856466884, "size": 15, "percentage": 0.2240579466566453, "quantity_eth": 2218456.9051562515, "color": "#F8C471", "group": "Funded by 0x6bcdca...", "funding_address": "0x6bcdca9f236625c45a28af4fcba4691c2d52fad4", "index": 87, "is_whale": false, "whale_value": "", "rank": 88}, {"id": "0x1b7ec93ec48295e0eb982a57ee022f88a0fc52fe", "x": 215.944045040098, "y": 282.16915554235135, "size": 15, "percentage": 0.22017390672598416, "quantity_eth": 2180000.0000000056, "color": "#82E0AA", "group": "Funded by 0xf25b89...", "funding_address": "0xf25b89f878a847a89c5e3782e654b2970097aa77", "index": 89, "is_whale": true, "whale_value": "278k", "rank": 90}, {"id": "0x43e6cd1f7168eb918018fae7ec15f0aef45a06c0", "x": 927.3734879383642, "y": 572.8061924522514, "size": 15, "percentage": 0.20199446233818713, "quantity_eth": 2000000.5197949314, "color": "#F1948A", "group": "Funded by 0x150957...", "funding_address": "0x15095716e97419e4e6052580ce30635d124b0e39", "index": 95, "is_whale": false, "whale_value": "", "rank": 96}, {"id": "0x005d550941bfcd40a91dd67a4ed5357d49bf4d87", "x": 394.5536237133654, "y": 8.674770689642866, "size": 15, "percentage": 0.20199440984035194, "quantity_eth": 2000000.0, "color": "#D7BDE2", "group": "Funded by 0x579b0c...", "funding_address": "0x579b0c50696d0214096def11d9524b72e84cfe3d", "index": 97, "is_whale": false, "whale_value": "", "rank": 98}, {"id": "0x14644875935c45cb9270cd9b3a2f0d54aaa378bf", "x": 635.1331119411667, "y": 691.8931351503696, "size": 15, "percentage": 0.1921577784067157, "quantity_eth": 1902604.914250739, "color": "#A9CCE3", "group": "Funded by 0xa79840...", "funding_address": "0xa79840f70d03a4e81e646401a6373659693f2216", "index": 99, "is_whale": false, "whale_value": "", "rank": 100}, {"id": "0xb885867de59a5e00cd3cd3d9deb89662324039d8", "x": 720.3952427437985, "y": 8.892709579005839, "size": 15, "percentage": 0.1810648629399427, "quantity_eth": 1792771.0284957776, "color": "#FAD7A0", "group": "Funded by 0x4aba74...", "funding_address": "0x4aba740b8c81aad0af40aaa7ddd8193545fc5ac3", "index": 102, "is_whale": false, "whale_value": "", "rank": 103}, {"id": "0xfb4453a5305240fa58d4f745355024403099f640", "x": 323.7421165927667, "y": 666.3567319583312, "size": 15, "percentage": 0.17949705392390597, "quantity_eth": 1777247.7373584057, "color": "#ABEBC6", "group": "Funded by 0xb2047a...", "funding_address": "0xb2047abd38e95e1e4cb2addf4df4610ccd2e98ce", "index": 103, "is_whale": false, "whale_value": "", "rank": 104}, {"id": "0xd643a9de4568d5ddb830462de5e5b6d2b6663608", "x": 987.1846498863416, "y": 172.3372664501892, "size": 15, "percentage": 0.17771737590709166, "quantity_eth": 1759626.6752882139, "color": "#FF6B6B", "group": "Funded by 0x65c987...", "funding_address": "0x65c9874a0107c5553c92430a7aa3863a79d543fd", "index": 106, "is_whale": true, "whale_value": "170k", "rank": 107}, {"id": "0x73645bd4bee96f2a8d5104899cbbe00e09e14668", "x": 168.01193032956309, "y": 353.21055484452995, "size": 15, "percentage": 0.1768755518123817, "quantity_eth": 1751291.5525947164, "color": "#4ECDC4", "group": "Funded by 0xe95ab0...", "funding_address": "0xe95ab07a55e8489fe8e81e3281c8b3fd95c7d8af", "index": 107, "is_whale": true, "whale_value": "51k", "rank": 108}, {"id": "0xf4c36f3d90b87117540f865387705b26ac274a8c", "x": 1000.7623183380271, "y": 526.7302017209562, "size": 15, "percentage": 0.17259244053783585, "quantity_eth": 1708883.3366650671, "color": "#45B7D1", "group": "Funded by 0x30900b...", "funding_address": "0x30900b3413cacbb642778bf732898cf9035483a2", "index": 109, "is_whale": false, "whale_value": "", "rank": 110}, {"id": "0xbc7733cc2376b143a55994c1ca6623675e6ddb91", "x": 303.0174258434588, "y": 19.943412961724846, "size": 15, "percentage": 0.1650166247285751, "quantity_eth": 1633873.1835103498, "color": "#96CEB4", "group": "Funded by 0x0dd86b...", "funding_address": "0x0dd86bcfb47717831d7bf2a2329837320e072a57", "index": 110, "is_whale": true, "whale_value": "78k", "rank": 111}, {"id": "0x7a74eac13e58cf33e6d8fd932ea72b5c8a8fbc75", "x": 713.9556258266274, "y": 691.6254448837768, "size": 15, "percentage": 0.16279684742877054, "quantity_eth": 1611894.5822058986, "color": "#FFEAA7", "group": "Funded by 0x0e2878...", "funding_address": "0x0e2878656892a21f3a6ac9268003e6f70b409703", "index": 114, "is_whale": false, "whale_value": "", "rank": 115}, {"id": "0xe86dff12258e41ba43623a9d49e4e772ab37d92e", "x": 681.1041659196975, "y": 7.98081134821463, "size": 15, "percentage": 0.16246499931534328, "quantity_eth": 1608608.866391391, "color": "#DDA0DD", "group": "Funded by 0xd25e79...", "funding_address": "0xd25e79971de8ad23ea6c88f569bce819919ec415", "index": 115, "is_whale": false, "whale_value": "", "rank": 116}, {"id": "0x24fff274565b9fdedbf7a9d4968a4f07b43dd93d", "x": 364.21872053437016, "y": 692.3049059016898, "size": 15, "percentage": 0.15975768368408674, "quantity_eth": 1581803.0193048674, "color": "#98D8C8", "group": "Funded by 0xe49c85...", "funding_address": "0xe49c85df53215f99f7d0ed6825e7914ef37547ee", "index": 118, "is_whale": true, "whale_value": "33k", "rank": 119}, {"id": "0xadac8fb2ba2492fed770fa4d33602687db36270f", "x": 982.9394593125025, "y": 80.96213927878432, "size": 15, "percentage": 0.15631843823415695, "quantity_eth": 1547750.141775751, "color": "#F7DC6F", "group": "Funded by 0x0887f6...", "funding_address": "0x0887f69c6089ee36f3ae68167831e39b7cac812d", "index": 120, "is_whale": false, "whale_value": "", "rank": 121}, {"id": "0xa176b75049bbbdda9023276e8381f3a2106f007f", "x": 134.5011993542929, "y": 439.3692709906947, "size": 15, "percentage": 0.15001618540308276, "quantity_eth": 1485349.8720251652, "color": "#BB8FCE", "group": "Funded by 0x827024...", "funding_address": "0x827024484cd5195423767fac08a6829764313445", "index": 123, "is_whale": false, "whale_value": "", "rank": 124}, {"id": "0x38dfa153ccef3bdef4deddb8902906fde8998534", "x": 1067.0199800379128, "y": 460.87081782591633, "size": 15, "percentage": 0.13830948303490123, "quantity_eth": 1369438.7200538404, "color": "#85C1E9", "group": "Funded by 0x49e1de...", "funding_address": "0x49e1de5e92ab370654fd4b632841fe3cbcd72b25", "index": 136, "is_whale": true, "whale_value": "19k", "rank": 137}, {"id": "0xbb568b1bfd4b93c42c6490f558540028a10217ee", "x": 214.8303346931355, "y": 53.62130824332536, "size": 15, "percentage": 0.13711861250753277, "quantity_eth": 1357647.596444928, "color": "#F8C471", "group": "Funded by 0x80d53e...", "funding_address": "0x80d53e414ad21e72a6e92e547f43d577cb6d0a63", "index": 137, "is_whale": false, "whale_value": "", "rank": 138}, {"id": "0x03c6620d401c23479f6af86d1d1487aa43cb2120", "x": 807.9072620402542, "y": 691.8382939748977, "size": 15, "percentage": 0.13579700110330728, "quantity_eth": 1344561.972884652, "color": "#82E0AA", "group": "Funded by 0xf18bd4...", "funding_address": "0xf18bd4d3ba78ada26815df2c0c762edf9b259f8a", "index": 140, "is_whale": true, "whale_value": "139k", "rank": 141}, {"id": "0x10c629ad600b833a8442ecb435340791f1add9bd", "x": 648.7970274485336, "y": 240.91734586671143, "size": 15, "percentage": 0.1342093772083797, "quantity_eth": 1328842.48939813, "color": "#F1948A", "group": "Funded by 0xf95802...", "funding_address": "0xf958026f3f3aa5ad8a3d43298d2401bc424d4c05", "index": 141, "is_whale": false, "whale_value": "", "rank": 142}, {"id": "0x96cb57400024d61c4863c772d890b9d25cb89797", "x": 425.59704352914514, "y": 687.8632030241147, "size": 15, "percentage": 0.1337401231993864, "quantity_eth": 1324196.2815217422, "color": "#D7BDE2", "group": "Funded by 0x38fc7b...", "funding_address": "0x38fc7bfb6d540af91d9b511885a2f90466833a9c", "index": 143, "is_whale": false, "whale_value": "", "rank": 144}, {"id": "0x0134ed2fa6832e6de142b4f986679d340e308cf4", "x": 969.7587855069953, "y": 7.691626169063529, "size": 15, "percentage": 0.13129643507711802, "quantity_eth": 1300000.680027624, "color": "#A9CCE3", "group": "Funded by 0x5aec1c...", "funding_address": "0x5aec1c5eef1563e86b508f06d533dbc506521d55", "index": 147, "is_whale": true, "whale_value": "93k", "rank": 148}, {"id": "0x707a0802f7f191d34a231baeb05220ef8d3ed320", "x": 119.27903590980605, "y": 537.5189448674306, "size": 15, "percentage": 0.12222304477258292, "quantity_eth": 1210162.6462750428, "color": "#FAD7A0", "group": "Funded by 0x707a08...", "funding_address": "0x707a0802f7f191d34a231baeb05220ef8d3ed320", "index": 157, "is_whale": true, "whale_value": "48k", "rank": 158}, {"id": "0xb9dd657b037a94043f0c5a95c20f255d199ebd11", "x": 1121.3255499889174, "y": 376.52679642837893, "size": 15, "percentage": 0.12059741924566811, "quantity_eth": 1194066.898593712, "color": "#ABEBC6", "group": "Funded by 0x19f3a2...", "funding_address": "0x19f3a2be0ead92867b2149df83098af19c4beab5", "index": 158, "is_whale": true, "whale_value": "632k", "rank": 159}, {"id": "0xd114c248c55321b16c084907e82679b8010a98b9", "x": 130.1166327292056, "y": 109.18135212932592, "size": 15, "percentage": 0.11814184705866874, "quantity_eth": 1169753.6298360256, "color": "#FF6B6B", "group": "Funded by 0x0134ed...", "funding_address": "0x0134ed2fa6832e6de142b4f986679d340e308cf4", "index": 159, "is_whale": false, "whale_value": "", "rank": 160}, {"id": "0xd484deab9d1a410250eb40089012e287fdada6b7", "x": 933.457167451639, "y": 692.0879013770714, "size": 15, "percentage": 0.11649301591728851, "quantity_eth": 1153428.1172371036, "color": "#4ECDC4", "group": "Funded by 0xedba32...", "funding_address": "0xedba32aa886aefbd77674e485ea03ea6bb7cb9db", "index": 162, "is_whale": false, "whale_value": "", "rank": 163}, {"id": "0xdcb66d732888d9aff2aec48c84b06c6797d8fc7d", "x": 1041.6473748219987, "y": 96.48026695650576, "size": 15, "percentage": 0.11140828833842563, "quantity_eth": 1103082.886565803, "color": "#45B7D1", "group": "Funded by 0x31a751...", "funding_address": "0x31a751bf4c8ab90a6c8759f8fe1d7a133374148d", "index": 166, "is_whale": false, "whale_value": "", "rank": 167}, {"id": "0x3fd69804237486f8d6b2d7302240528688ed73d7", "x": 1074.1366574967556, "y": 384.82996265872197, "size": 15, "percentage": 0.11120992817674893, "quantity_eth": 1101118.8702167023, "color": "#96CEB4", "group": "Funded by 0x1a62d4...", "funding_address": "0x1a62d4cfa8e89529492aadd3bf6347eaead8c515", "index": 167, "is_whale": false, "whale_value": "", "rank": 168}, {"id": "0x78bb8a1f182b2e12273b00abeb7456838f144f23", "x": 908.8804544259312, "y": 7.510257083691329, "size": 15, "percentage": 0.10351645151977457, "quantity_eth": 1024943.7259336999, "color": "#FFEAA7", "group": "Funded by 0xd9ebc8...", "funding_address": "0xd9ebc885674a93a7c119f37a6abf9dbed84e1ff8", "index": 173, "is_whale": false, "whale_value": "", "rank": 174}, {"id": "0x85d79536d4217648b385544a9c311fb9a01f4461", "x": 125.51180014662725, "y": 643.6408489973863, "size": 15, "percentage": 0.10128668404197268, "quantity_eth": 1002866.2092384191, "color": "#DDA0DD", "group": "Funded by 0xf5042e...", "funding_address": "0xf5042e6ffac5a625d4e7848e0b01373d8eb9e222", "index": 177, "is_whale": false, "whale_value": "", "rank": 178}, {"id": "0x204de0de00cc63fef73636321c5d32c459bb8637", "x": 1159.1375084607232, "y": 276.0997521497077, "size": 15, "percentage": 0.10100392303108999, "quantity_eth": 1000066.5177904608, "color": "#98D8C8", "group": "Funded by 0xccac87...", "funding_address": "0xccac87add7ec5af25c361bf79a093777cf4b7898", "index": 180, "is_whale": false, "whale_value": "", "rank": 181}, {"id": "0x77c36e3c02519c188c90e377e1d05d5ad5031a70", "x": 54.02269431788852, "y": 186.26612543489315, "size": 15, "percentage": 0.10099737957022988, "quantity_eth": 1000001.72925631, "color": "#F7DC6F", "group": "Funded by 0x8bf099...", "funding_address": "0x8bf0995757ab005ac89abb7fd6f903d613507940", "index": 181, "is_whale": true, "whale_value": "43k", "rank": 182}, {"id": "0x660c4fd68d66ccf3ca933f905f38ba7f4344a07a", "x": 1035.2655182460005, "y": 692.2531360055747, "size": 15, "percentage": 0.10099729733942296, "quantity_eth": 1000000.9150673732, "color": "#BB8FCE", "group": "Funded by 0x9039a7...", "funding_address": "0x9039a7fc1ca7de4905185aac3b42beece5aa57ec", "index": 182, "is_whale": false, "whale_value": "", "rank": 183}, {"id": "0xbcb46fa021e1eb58628f425876d18320ce479939", "x": 1090.0077242089474, "y": 562.5705045008153, "size": 15, "percentage": 0.10099723125534332, "quantity_eth": 1000000.2607514474, "color": "#85C1E9", "group": "Funded by 0x16dca1...", "funding_address": "0x16dca1976cdf85aef31d0b1fa6ff362bafee7a44", "index": 185, "is_whale": true, "whale_value": "136k", "rank": 186}, {"id": "0x976888705d859d4c50193469b08e2e0102c6fb11", "x": 15.520056557624649, "y": 329.8048421346501, "size": 15, "percentage": 0.10099720492017597, "quantity_eth": 1000000.0, "color": "#F8C471", "group": "Funded by 0xdbd04c...", "funding_address": "0xdbd04cf0981edc8c0c0ff721099a06ed35ddf927", "index": 188, "is_whale": false, "whale_value": "", "rank": 189}, {"id": "0xa17cc9a1e2c9426fdd35c9b986497c2bd43025ea", "x": 374.0677334979666, "y": 226.32913402891526, "size": 15, "percentage": 0.09911356764042004, "quantity_eth": 981349.6098110372, "color": "#82E0AA", "group": "Funded by 0xe71483...", "funding_address": "0xe71483181cc3a41c75f306798eb4b37985981a9a", "index": 191, "is_whale": false, "whale_value": "", "rank": 192}, {"id": "0x4128b17ec1aaa23fd39f0e2b8c8dc74f3bdf0938", "x": 138.64873884645417, "y": 690.1972484148333, "size": 15, "percentage": 0.09874491914974212, "quantity_eth": 977699.5237421277, "color": "#F1948A", "group": "Funded by 0x18e539...", "funding_address": "0x18e5397aaeb946ea7fdfc1c51a46b184112f7c83", "index": 192, "is_whale": false, "whale_value": "", "rank": 193}, {"id": "0xe419705141242d28127697a31ff50c7296ed3674", "x": 1176.4350097687811, "y": 163.0275969217246, "size": 15, "percentage": 0.0959473839773686, "quantity_eth": 950000.3891513776, "color": "#D7BDE2", "group": "Funded by 0x0d7530...", "funding_address": "0x0d75309c9ccf17b5ea03db0bb12fbf654b04ac05", "index": 196, "is_whale": false, "whale_value": "", "rank": 197}, {"id": "0x05148a3d6ab439e36eb848c79ad699e2157c63ee", "x": 11.639377503869355, "y": 283.35652322904787, "size": 15, "percentage": 0.09368703274367945, "quantity_eth": 927620.054611668, "color": "#A9CCE3", "group": "Funded by 0xb45e29...", "funding_address": "0xb45e2938534b4ea97a793593f3a0fc719cfa6889", "index": 200, "is_whale": false, "whale_value": "", "rank": 201}, {"id": "0x70c7ee8270de139e61b3b6a4dff64a7af7c08344", "x": 1132.6281333225008, "y": 663.418684180424, "size": 15, "percentage": 0.0917974471835712, "quantity_eth": 908910.7689279533, "color": "#FAD7A0", "group": "Funded by 0x201284...", "funding_address": "0x201284d93bd2eb01747faacd9378e988cfb5a431", "index": 203, "is_whale": false, "whale_value": "", "rank": 204}, {"id": "0xb28ffee1fcc801403c7204dada134b3e6525ca8c", "x": 960.0289017157887, "y": 525.6199046376051, "size": 15, "percentage": 0.09172730557592636, "quantity_eth": 908216.2783457605, "color": "#ABEBC6", "group": "Funded by 0xb87aa2...", "funding_address": "0xb87aa2d29cfa795684475954aa95a11c6d086095", "index": 204, "is_whale": false, "whale_value": "", "rank": 205}, {"id": "0xf578cd2559b29b28e975aad57682b4cf777ddda6", "x": 1183.563658413401, "y": 321.0569773141894, "size": 15, "percentage": 0.09089756430408188, "quantity_eth": 900000.7908726146, "color": "#FF6B6B", "group": "Funded by 0x1ddd51...", "funding_address": "0x1ddd518783dd35f17df7dc93724b67f9fb67a21b", "index": 206, "is_whale": false, "whale_value": "", "rank": 207}, {"id": "0x3272596f776470d2d7c3f7dff3dc50888b7d8967", "x": 106.55131004693753, "y": 45.89078199232172, "size": 15, "percentage": 0.0878588907908073, "quantity_eth": 869914.0818822398, "color": "#4ECDC4", "group": "Funded by 0x88882b...", "funding_address": "0x88882b14d8b4dfe266fa9b0e7ea08f853f5ec496", "index": 211, "is_whale": false, "whale_value": "", "rank": 212}, {"id": "0xfff1f85d616d1ca73523b9301709d6ddb39c70ed", "x": 708.3759364409663, "y": 625.6304478987578, "size": 15, "percentage": 0.08726614369435448, "quantity_eth": 864045.136331506, "color": "#45B7D1", "group": "Funded by 0x8aab66...", "funding_address": "0x8aab6650f588d78f66aeed60404554b4f28a455c", "index": 212, "is_whale": true, "whale_value": "63k", "rank": 213}, {"id": "0x0e841d540324d4081d582a02c15aec23d59067f1", "x": 1169.942756056658, "y": 41.666974168285435, "size": 15, "percentage": 0.08584770523692407, "quantity_eth": 850000.8025447294, "color": "#96CEB4", "group": "Funded by 0xc56a6e...", "funding_address": "0xc56a6edf354b68c424dc9ee16aaf385ed19d0909", "index": 217, "is_whale": false, "whale_value": "", "rank": 218}, {"id": "0xc799d583942ac7d3a1706c172ef618137b03ef7c", "x": 7.7482661592117665, "y": 397.78781959543215, "size": 15, "percentage": 0.08521520587503091, "quantity_eth": 843738.2593150127, "color": "#FFEAA7", "group": "Funded by 0x6ef30a...", "funding_address": "0x6ef30a7203e45620e766a4be9fe3e838a8015d58", "index": 220, "is_whale": false, "whale_value": "", "rank": 221}, {"id": "0x4ebc17059cfc143d86fb92ed707805d68142e3ec", "x": 1191.0922385776278, "y": 583.8468097618387, "size": 15, "percentage": 0.08406274038738693, "quantity_eth": 832327.3941474584, "color": "#DDA0DD", "group": "Funded by 0xa2b16c...", "funding_address": "0xa2b16c27c0766a1df18892f7b0413b4f5806ee4d", "index": 223, "is_whale": true, "whale_value": "55k", "rank": 224}, {"id": "0xb4eaea41f086e917ea9ae08ced9fe32e25101d69", "x": 122.9820048824201, "y": 10.231420668302405, "size": 15, "percentage": 0.0838402172569007, "quantity_eth": 830124.1338625614, "color": "#98D8C8", "group": "Funded by 0xe60f33...", "funding_address": "0xe60f33e17a0f67ff26cdf7c311d46dc0e24415a1", "index": 225, "is_whale": false, "whale_value": "", "rank": 226}, {"id": "0xb5e69f7221ce7cc254e80a201fef2837f5d54e62", "x": 866.82298925545, "y": 288.68408856713216, "size": 15, "percentage": 0.08332273539588028, "quantity_eth": 825000.4092859316, "color": "#F7DC6F", "group": "Funded by 0xcae24c...", "funding_address": "0xcae24c0cbe9dac1c7aa3f0f46e39bd02152bf371", "index": 226, "is_whale": false, "whale_value": "", "rank": 227}, {"id": "0xdb96e4afa74251146c4d09d4585a033c95c0b1e7", "x": 665.8489836448604, "y": 37.50494961105352, "size": 15, "percentage": 0.08332269405914516, "quantity_eth": 825000.0, "color": "#BB8FCE", "group": "Funded by 0x77921f...", "funding_address": "0x77921fce0b71fad5d54f8eb7706009f8ceea9ad8", "index": 227, "is_whale": false, "whale_value": "", "rank": 228}, {"id": "0x663c15e86ecc9c870342d09347653b08973418ba", "x": 956.4000011645988, "y": 376.27607693440916, "size": 15, "percentage": 0.08207699707477016, "quantity_eth": 812666.0251602056, "color": "#85C1E9", "group": "Funded by 0x403035...", "funding_address": "0x4030354d2d115cadfc53e835ee20f9a3c0c339f3", "index": 228, "is_whale": false, "whale_value": "", "rank": 229}, {"id": "0x3326a0ccad0d27f9b9a9eb9d9c86bc469ba6fb42", "x": 1161.9167980452871, "y": 8.891658725485144, "size": 15, "percentage": 0.0820294271559238, "quantity_eth": 812195.0228301515, "color": "#F8C471", "group": "Funded by 0x5dcc42...", "funding_address": "0x5dcc429f597db193de01eb5f39450a017e094e5d", "index": 231, "is_whale": false, "whale_value": "", "rank": 232}, {"id": "0x988578237d21f0b3b7e5801f41e1c347a493bd0d", "x": 11.573358267338904, "y": 525.8196752490179, "size": 15, "percentage": 0.08181558517805877, "quantity_eth": 810077.7169301114, "color": "#82E0AA", "group": "Funded by 0xdaa6c4...", "funding_address": "0xdaa6c40762712a106c02f9656d898138379cd30e", "index": 232, "is_whale": false, "whale_value": "", "rank": 233}, {"id": "0x64566dede363126b91f60072a72a9aeaac94f6ff", "x": 1192.1890219785232, "y": 466.95451189422056, "size": 15, "percentage": 0.08112313732320278, "quantity_eth": 803221.6078387432, "color": "#F1948A", "group": "Funded by 0xdb4d25...", "funding_address": "0xdb4d25e52a1bfc2754433242d4582c4b35db8b6f", "index": 234, "is_whale": false, "whale_value": "", "rank": 235}, {"id": "0x262d4af4ee4348cb3ef7d6ae7a5fa751fee5b10d", "x": 25.986619845681176, "y": 9.136342683998677, "size": 15, "percentage": 0.07955181343748982, "quantity_eth": 787663.5150484046, "color": "#D7BDE2", "group": "Funded by 0x01f3d6...", "funding_address": "0x01f3d6de4bbde97c4f1c89ae3d62e285649805d5", "index": 236, "is_whale": false, "whale_value": "", "rank": 237}, {"id": "0x2a0d878f4dfb68a0a42766e4c44dedc8dbb11fcb", "x": 867.121799634244, "y": 41.025809794389446, "size": 15, "percentage": 0.0773883991348043, "quantity_eth": 766242.9786642997, "color": "#A9CCE3", "group": "Funded by 0xc02ddc...", "funding_address": "0xc02ddc09e36ff05ed3b0b5c56e2c230df0bdb531", "index": 242, "is_whale": false, "whale_value": "", "rank": 243}, {"id": "0x00fb97ba9659f3d1d2be9f75b7bdbedab1613951", "x": 1171.787149140051, "y": 418.0175274156942, "size": 15, "percentage": 0.075444821482739, "quantity_eth": 746999.1030184199, "color": "#FAD7A0", "group": "Funded by 0x3bdb03...", "funding_address": "0x3bdb03ad7363152dfbc185ee23ebc93f0cf93fd1", "index": 248, "is_whale": false, "whale_value": "", "rank": 249}, {"id": "0x51afcb298c275c13c59b38f1cabb5900268a8c8a", "x": 1065.3417797242641, "y": 185.80660004548105, "size": 50.12663151185948, "percentage": 3.3417754341239654, "quantity_eth": 33087801.160093162, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 0, "is_whale": false, "whale_value": "", "rank": 1}, {"id": "0x90d644bafa0dad528d89ebca2b2d2d51379a428c", "x": 603.1826227580169, "y": 425.82929556052267, "size": 20.906422040175997, "percentage": 1.3937614693450664, "quantity_eth": 13800000.41037411, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 5, "is_whale": true, "whale_value": "762k", "rank": 6}, {"id": "0x954e69677041eb75a53abdf220c06bca0fb5e845", "x": 638.2135510967232, "y": 311.3168113210891, "size": 20.634415367478926, "percentage": 1.3756276911652618, "quantity_eth": 13620453.08335514, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 6, "is_whale": true, "whale_value": "150k", "rank": 7}, {"id": "0x42cca279ba3b44bdee2d74c099bf6fb9ea4e5c26", "x": 660.9527578071425, "y": 388.2133186335534, "size": 15.300183651502167, "percentage": 1.0200122434334777, "quantity_eth": 10099410.614775462, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 8, "is_whale": true, "whale_value": "122k", "rank": 9}, {"id": "0x7fe435886425622959f15ee933abadf8bf91a04e", "x": 609.1027080347517, "y": 265.3382504233516, "size": 15.095785256175427, "percentage": 1.0063856837450285, "quantity_eth": 9964490.448428096, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 10, "is_whale": true, "whale_value": "84k", "rank": 11}, {"id": "0xd19d9d852e31fa898471418f75f36856f572ee1b", "x": 555.4103777316716, "y": 452.3873983502002, "size": 15, "percentage": 0.8484665779500276, "quantity_eth": 8400891.67438466, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 14, "is_whale": true, "whale_value": "80k", "rank": 15}, {"id": "0x24e6b2b12be180435726d3dd3242f6bf0c4f2038", "x": 509.8949644299644, "y": 305.8181641391564, "size": 15, "percentage": 0.6981186931133282, "quantity_eth": 6912257.558663059, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 18, "is_whale": false, "whale_value": "", "rank": 19}, {"id": "0x88a61a6ae02b7e8442454f81be5299bc2a88f10e", "x": 639.3270963201383, "y": 470.3106913824288, "size": 15, "percentage": 0.6555542649239033, "quantity_eth": 6490815.913589157, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 19, "is_whale": true, "whale_value": "66k", "rank": 20}, {"id": "0x2a86c4704baf15a529e64fdf170bf5061f768c7d", "x": 512.145522065839, "y": 252.95871518527582, "size": 15, "percentage": 0.5650949808000122, "quantity_eth": 5595154.650533547, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 24, "is_whale": false, "whale_value": "", "rank": 25}, {"id": "0x993c7873c221594f5fd98fb5ce04fe382448af6a", "x": 713.0367783322044, "y": 381.08474268078123, "size": 15, "percentage": 0.5326105783943493, "quantity_eth": 5273518.002951695, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 27, "is_whale": false, "whale_value": "", "rank": 28}, {"id": "0x04885432d317727245f4f47dfe1556e14bd8df27", "x": 486.0858293854935, "y": 349.985049127818, "size": 15, "percentage": 0.5235574995978449, "quantity_eth": 5183881.078804539, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 28, "is_whale": true, "whale_value": "51k", "rank": 29}, {"id": "0xa8fd23be3e9e81c73b1a94d5aa68ebd57e81938d", "x": 693.3653055573168, "y": 302.6634891223165, "size": 15, "percentage": 0.5140944682804858, "quantity_eth": 5090185.1064770045, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 31, "is_whale": false, "whale_value": "", "rank": 32}, {"id": "0x3d3823242b263782fa3138370fc1858662f73303", "x": 466.9657912464316, "y": 404.53506186287586, "size": 15, "percentage": 0.43428807937226793, "quantity_eth": 4300000.972457716, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 37, "is_whale": false, "whale_value": "", "rank": 38}, {"id": "0x936bf04beb4853e447370afcf2466d45e73f9bfe", "x": 692.763195032186, "y": 252.22697311298438, "size": 15, "percentage": 0.42454831585913366, "quantity_eth": 4203565.001572857, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 38, "is_whale": true, "whale_value": "38k", "rank": 39}, {"id": "0x5c4764645b46b2f93abaa44256f26fc3a9aef95a", "x": 537.0661252213105, "y": 502.25702361954427, "size": 15, "percentage": 0.4231829990656315, "quantity_eth": 4190046.6394104464, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 39, "is_whale": false, "whale_value": "", "rank": 40}, {"id": "0xdb87b478d3fae9aea8364f74c96835d7da52b13d", "x": 615.656130121762, "y": 205.8477000196998, "size": 15, "percentage": 0.4116149239373144, "quantity_eth": 4075508.072353467, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 41, "is_whale": false, "whale_value": "", "rank": 42}, {"id": "0x8e41daf993c1d5a67db68eb55dd7867e2305b1d4", "x": 650.8316948904842, "y": 518.2599475815881, "size": 15, "percentage": 0.3740263725482084, "quantity_eth": 3703333.8976442316, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 46, "is_whale": false, "whale_value": "", "rank": 47}, {"id": "0x82963cd55a40f091e109fd5cd88fe6e479b0e869", "x": 547.4135862432983, "y": 175.4300719193723, "size": 15, "percentage": 0.36358999817281024, "quantity_eth": 3600000.598632178, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 50, "is_whale": true, "whale_value": "50k", "rank": 51}, {"id": "0x076d2049fbec1e73a1fff78791e868fa43664721", "x": 716.1786291369441, "y": 480.01148181831024, "size": 15, "percentage": 0.35461713117553995, "quantity_eth": 3511157.8726937515, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 51, "is_whale": false, "whale_value": "", "rank": 52}, {"id": "0x272547471da7c09016a27e50d7cdff4448573ea7", "x": 451.5119262285408, "y": 278.05354805383604, "size": 15, "percentage": 0.3516441377930689, "quantity_eth": 3481721.4800250563, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 52, "is_whale": true, "whale_value": "170k", "rank": 53}, {"id": "0xff7b959c308704e1314cf56120ad4168bf767fe4", "x": 768.2344864758683, "y": 374.4368074879045, "size": 15, "percentage": 0.3447884071849377, "quantity_eth": 3413841.0806263825, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 55, "is_whale": false, "whale_value": "", "rank": 56}, {"id": "0x4f110f279ea80958f94e9f60257063455c994182", "x": 422.9810445184082, "y": 380.84728424718463, "size": 15, "percentage": 0.3359772216655239, "quantity_eth": 3326599.20570145, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 58, "is_whale": false, "whale_value": "", "rank": 59}, {"id": "0xb2ffc5f5e6da41402996f9f535bf620ddf14c5fe", "x": 760.5109485082471, "y": 268.53690768831046, "size": 15, "percentage": 0.33063412064004155, "quantity_eth": 3273695.7512968914, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 59, "is_whale": true, "whale_value": "52k", "rank": 60}, {"id": "0x974830d20f087a29a5d77f887896d5eff3956be7", "x": 488.0387884578595, "y": 479.6581607471371, "size": 15, "percentage": 0.32763422486101007, "quantity_eth": 3243992.990894735, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 60, "is_whale": false, "whale_value": "", "rank": 61}, {"id": "0x08103e240b6be73e29319d9b9dbe9268e32a0b02", "x": 693.7878647998095, "y": 183.40594106694255, "size": 15, "percentage": 0.32319109947305996, "quantity_eth": 3200000.4329673965, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 61, "is_whale": true, "whale_value": "316k", "rank": 62}, {"id": "0x058b448da23cd8619a6a7fb94911c78b9a0a3cea", "x": 570.0303319391285, "y": 541.8387925204713, "size": 15, "percentage": 0.31441755491010165, "quantity_eth": 3113131.2510935757, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 63, "is_whale": true, "whale_value": "121k", "rank": 64}, {"id": "0x3838b22684109d5369ebcacfb4d38aeb731e9b06", "x": 578.6219402183538, "y": 137.11273824908514, "size": 15, "percentage": 0.30660813053524083, "quantity_eth": 3035808.0778331566, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 64, "is_whale": false, "whale_value": "", "rank": 65}, {"id": "0xe93a3b065978b57a984e046bc182279cf051b722", "x": 695.7856051045815, "y": 538.6184363243906, "size": 15, "percentage": 0.30557366148512694, "quantity_eth": 3025565.5265572923, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 65, "is_whale": false, "whale_value": "", "rank": 66}, {"id": "0xf8aa9e1b0aaa30e6cf9609382f1169f7e41942c4", "x": 458.31675829791493, "y": 209.99722898996765, "size": 15, "percentage": 0.3029916147605279, "quantity_eth": 3000000.0, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 68, "is_whale": true, "whale_value": "34k", "rank": 69}, {"id": "0xd808667149602f22339318d37774aea5edd47d28", "x": 776.2259154827298, "y": 474.76774351066496, "size": 15, "percentage": 0.30202153051413555, "quantity_eth": 2990394.9396702703, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 69, "is_whale": false, "whale_value": "", "rank": 70}, {"id": "0x9d88a6c2f300823891dff11b494f249e1f22a000", "x": 385.12962380838997, "y": 302.7694861845017, "size": 15, "percentage": 0.301064776441955, "quantity_eth": 2980921.8649160066, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 70, "is_whale": true, "whale_value": "68k", "rank": 71}, {"id": "0xd245363ee0008b4a08a91d5b04d88617fc21709d", "x": 824.0776275464223, "y": 329.647682363748, "size": 15, "percentage": 0.2906155190922856, "quantity_eth": 2877461.008173208, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 71, "is_whale": true, "whale_value": "47k", "rank": 72}, {"id": "0x6a21ff894b1df89c3cbeb815f806c31149f43822", "x": 387.93499184840437, "y": 439.0417448035677, "size": 15, "percentage": 0.27603472665051504, "quantity_eth": 2733092.7313155006, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 72, "is_whale": false, "whale_value": "", "rank": 73}, {"id": "0xd3c12b8c68f78300edfd19370ccea85f9b326525", "x": 779.0590184447967, "y": 197.80647873977708, "size": 15, "percentage": 0.2553996143211367, "quantity_eth": 2528779.0342613347, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 76, "is_whale": false, "whale_value": "", "rank": 77}, {"id": "0xd96a0e2e873e26a892f9b11125e4b99d0765d7b9", "x": 491.9605716685266, "y": 558.5970137831239, "size": 15, "percentage": 0.24748499277077743, "quantity_eth": 2450414.2759829774, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 79, "is_whale": false, "whale_value": "", "rank": 80}, {"id": "0x9dc19af857bbc3aab39f0e42a93430682f2c7bd0", "x": 671.19059385898, "y": 112.76443937894692, "size": 15, "percentage": 0.23900869846252304, "quantity_eth": 2366488.247386902, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 81, "is_whale": false, "whale_value": "", "rank": 82}, {"id": "0xc783bc9b665a2eb74b46126733eeea3d891ee7e5", "x": 613.6225364871016, "y": 599.628577089358, "size": 15, "percentage": 0.23858194576239763, "quantity_eth": 2362262.8561945152, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 82, "is_whale": false, "whale_value": "", "rank": 83}, {"id": "0xbaf964788cca17ab651be519453144489f4edd38", "x": 509.82074654297577, "y": 111.47808854125418, "size": 15, "percentage": 0.2329694427909294, "quantity_eth": 2306691.9819717673, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 84, "is_whale": true, "whale_value": "93k", "rank": 85}, {"id": "0xcc424b03c8202a50413b042d58e9064faa2acdbf", "x": 761.1323484747961, "y": 554.0499112349644, "size": 15, "percentage": 0.23166080558261037, "quantity_eth": 2293734.819351739, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 85, "is_whale": true, "whale_value": "121k", "rank": 86}, {"id": "0x27d61c9e957e8e2f51733e8fdc94137f4708d1e0", "x": 378.10576080506786, "y": 197.0388943525399, "size": 15, "percentage": 0.21644019024919287, "quantity_eth": 2143031.487062026, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 90, "is_whale": false, "whale_value": "", "rank": 91}, {"id": "0x70227e66d638411662e0c80fba15aae1ce59fa37", "x": 878.8420386675264, "y": 426.8166584696237, "size": 15, "percentage": 0.2144082026502003, "quantity_eth": 2122912.241181919, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 91, "is_whale": false, "whale_value": "", "rank": 92}, {"id": "0x7809cbfa3df700b8515f8aa79c98b0f5c27721ec", "x": 325.0468331517743, "y": 355.07504089951436, "size": 15, "percentage": 0.21342266014347283, "quantity_eth": 2113154.124533974, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 92, "is_whale": false, "whale_value": "", "rank": 93}, {"id": "0x48ce075e433772ac34462331a2363f29dae29903", "x": 860.4765464262108, "y": 259.1925917368718, "size": 15, "percentage": 0.20613914130533742, "quantity_eth": 2041038.0808880928, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 93, "is_whale": false, "whale_value": "", "rank": 94}, {"id": "0x362c5f18d4a81604441d8d496d5287e4d47b8bfb", "x": 370.1073265817929, "y": 518.4469017483835, "size": 15, "percentage": 0.20241085521345947, "quantity_eth": 2004123.3356253442, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 94, "is_whale": false, "whale_value": "", "rank": 95}, {"id": "0x9956ceac481b91ed23049b49723fc4e17933ce0c", "x": 771.203193295986, "y": 115.92850108298691, "size": 15, "percentage": 0.20199440984035236, "quantity_eth": 2000000.0000000044, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 96, "is_whale": false, "whale_value": "", "rank": 97}, {"id": "0xf8e664f567663608ba3bd5fd43fa0c18a5a969e2", "x": 505.928978037826, "y": 629.5990751540359, "size": 15, "percentage": 0.2001036844990202, "quantity_eth": 1981279.429041367, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 98, "is_whale": true, "whale_value": "31k", "rank": 99}, {"id": "0x31920f3e45ae3da3cc182584b870b5d8dcdc43f9", "x": 597.675797656149, "y": 43.05518179587108, "size": 15, "percentage": 0.19111297094630122, "quantity_eth": 1892259.9996440401, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 100, "is_whale": false, "whale_value": "", "rank": 101}, {"id": "0xf68ab6df611bae266d82310cb27a733e40a57249", "x": 682.5256543882479, "y": 639.9428684991478, "size": 15, "percentage": 0.18132674056507792, "quantity_eth": 1795363.9480259984, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 101, "is_whale": false, "whale_value": "", "rank": 102}, {"id": "0x6afadc4789dde60bed0dc46accb8b02619d98dbe", "x": 430.4042904905775, "y": 100.1174369508837, "size": 15, "percentage": 0.17941686649297445, "quantity_eth": 1776453.7804266778, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 104, "is_whale": true, "whale_value": "43k", "rank": 105}, {"id": "0xcf5c50d35b968a00544d5a3b08ecd2e00d533410", "x": 840.3121717867263, "y": 539.4361636307782, "size": 15, "percentage": 0.17835928452236807, "quantity_eth": 1765982.3820207294, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 105, "is_whale": false, "whale_value": "", "rank": 106}, {"id": "0x8101dbbbf724b26970286432cfd7e7978b7e199c", "x": 309.9390970219139, "y": 240.61685429858346, "size": 15, "percentage": 0.17619513152571092, "quantity_eth": 1744554.5316325172, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 108, "is_whale": true, "whale_value": "65k", "rank": 109}, {"id": "0x2d9a5cb8ec19a6d3623b551c38a4bf9f1afe5596", "x": 923.5479242998715, "y": 366.8433716114695, "size": 15, "percentage": 0.16331486819708743, "quantity_eth": 1617023.6426459998, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 111, "is_whale": false, "whale_value": "", "rank": 112}, {"id": "0x98202996cbbe16321157e451b14c0cc09b2a5044", "x": 290.8514571118895, "y": 434.5142515774152, "size": 15, "percentage": 0.16309744939780885, "quantity_eth": 1614870.92169248, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 113, "is_whale": false, "whale_value": "", "rank": 114}, {"id": "0xf8df4aab28857eb7c6b7d88363859c9369d6b118", "x": 872.7773293265105, "y": 178.89614672516458, "size": 15, "percentage": 0.16162738536031734, "quantity_eth": 1600315.4294028333, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 116, "is_whale": false, "whale_value": "", "rank": 117}, {"id": "0xddc0b41a2b6bb46356d0c76f9b645fa4fdc6edd0", "x": 389.0831992488396, "y": 598.5761516334487, "size": 15, "percentage": 0.15691920784348873, "quantity_eth": 1553698.5203453028, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 119, "is_whale": false, "whale_value": "", "rank": 120}, {"id": "0xa3b1ce841d25b485c5f317087bd58e523ad5bd5f", "x": 727.4968497847834, "y": 45.624322103495956, "size": 15, "percentage": 0.15152991974294053, "quantity_eth": 1500337.7555121803, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 122, "is_whale": false, "whale_value": "", "rank": 123}, {"id": "0xb9487ee8b353f5fa2d91de6695d77eeb68191e3b", "x": 560.070888301888, "y": 665.33584354406, "size": 15, "percentage": 0.14994910964396127, "quantity_eth": 1484685.7372189148, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 124, "is_whale": false, "whale_value": "", "rank": 125}, {"id": "0x4170a8dc9f94d54f51fb6e3daa5021b2f4944ad5", "x": 517.15615522296, "y": 19.94277120763053, "size": 15, "percentage": 0.1494850161333675, "quantity_eth": 1480090.624800105, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 125, "is_whale": false, "whale_value": "", "rank": 126}, {"id": "0x489abe769be1d56ee5eb53d8840724ac2d269712", "x": 771.16782374491, "y": 646.0837315936683, "size": 15, "percentage": 0.1473920621064432, "quantity_eth": 1459367.734215376, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 127, "is_whale": false, "whale_value": "", "rank": 128}, {"id": "0x84f5b085c008ae2d4c0f3eb824e6879aa4af01ea", "x": 344.41613202858, "y": 116.77717428869067, "size": 15, "percentage": 0.14608009889033569, "quantity_eth": 1446377.6399138113, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 128, "is_whale": true, "whale_value": "54k", "rank": 129}, {"id": "0xf914b30a7fe02f462e623f0a92d2d89fd3404661", "x": 917.7374999030334, "y": 496.77493367523573, "size": 15, "percentage": 0.14521638086405214, "quantity_eth": 1437825.7396214597, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 129, "is_whale": true, "whale_value": "38k", "rank": 130}, {"id": "0xadcdc2341a125e56644bd4cf02a9de3f4f76a46d", "x": 248.7969965778354, "y": 305.587722561762, "size": 15, "percentage": 0.14341603098664998, "quantity_eth": 1420000.0000000012, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 130, "is_whale": true, "whale_value": "89k", "rank": 131}, {"id": "0xdff1046d9bb1dde851ea5c81b0c39eaef1c47b23", "x": 952.1416443941235, "y": 285.49990477989473, "size": 15, "percentage": 0.14181910650970395, "quantity_eth": 1404188.428994564, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 132, "is_whale": true, "whale_value": "92k", "rank": 133}, {"id": "0x37786435e0ccb2749423c37fd0babc643797e581", "x": 278.9789843850791, "y": 524.5903324119896, "size": 15, "percentage": 0.14173480215904413, "quantity_eth": 1403353.7093532984, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 133, "is_whale": false, "whale_value": "", "rank": 134}, {"id": "0xe5d99c9a37710d32c94e28e6f70b8c08ce678696", "x": 856.2908798387559, "y": 88.71283056476659, "size": 15, "percentage": 0.14004657036940932, "quantity_eth": 1386638.0805300146, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 134, "is_whale": false, "whale_value": "", "rank": 135}, {"id": "0x266f57b11f2fdd3c9cd2ae0537470ead56547f4b", "x": 438.0050035780446, "y": 660.7628834403405, "size": 15, "percentage": 0.13592673743622144, "quantity_eth": 1345846.52658113, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 138, "is_whale": false, "whale_value": "", "rank": 139}, {"id": "0xb86a8825b4fd8962ca4d636abc233c13d4234ddc", "x": 642.7684436512037, "y": 11.198826609619783, "size": 15, "percentage": 0.13581746396130015, "quantity_eth": 1344764.5810460267, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 139, "is_whale": false, "whale_value": "", "rank": 140}, {"id": "0xf191d9a381e525285787ee08df257023194784e0", "x": 674.653933034641, "y": 689.3869876181865, "size": 15, "percentage": 0.13265870713489678, "quantity_eth": 1313488.8954575006, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 145, "is_whale": false, "whale_value": "", "rank": 146}, {"id": "0x6bc4963f91f6806542ea5d4b88a1416730339160", "x": 437.9705186167465, "y": 7.663425409438855, "size": 15, "percentage": 0.13033848489954356, "quantity_eth": 1290515.7623179546, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 148, "is_whale": false, "whale_value": "", "rank": 149}, {"id": "0x15491cb09f594b8ca730d65b018d6f509d6cefcd", "x": 865.6408647536282, "y": 630.0552284335084, "size": 15, "percentage": 0.13012641943757702, "quantity_eth": 1288416.046171016, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 149, "is_whale": false, "whale_value": "", "rank": 150}, {"id": "0xc86929308436278df557bed877978286865856f1", "x": 258.6554809815147, "y": 161.36299584641685, "size": 15, "percentage": 0.12865197088875333, "quantity_eth": 1273817.1416766883, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 151, "is_whale": false, "whale_value": "", "rank": 152}, {"id": "0x725acb6c076aca30005aa648f1edf1a85fda2d02", "x": 986.3087760482333, "y": 427.4695394856324, "size": 15, "percentage": 0.12788888887865965, "quantity_eth": 1266261.6651593256, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 152, "is_whale": false, "whale_value": "", "rank": 153}, {"id": "0xa1c4135878dc4ab718abf60615e18a947c5c9aef", "x": 204.363464100361, "y": 393.3097155535989, "size": 15, "percentage": 0.12696257741791384, "quantity_eth": 1257090.010740989, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 153, "is_whale": false, "whale_value": "", "rank": 154}, {"id": "0x0094345964995690e97088c082c43ad23fc15a73", "x": 965.2175357957026, "y": 191.88686348258403, "size": 15, "percentage": 0.12560751639720666, "quantity_eth": 1243673.193693644, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 154, "is_whale": true, "whale_value": "100k", "rank": 155}, {"id": "0x3ba98367ee49bf584f9897e33d9b03be406ef7e9", "x": 295.55210728645545, "y": 618.6028306296903, "size": 15, "percentage": 0.12479091639413893, "quantity_eth": 1235587.8213933597, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 155, "is_whale": false, "whale_value": "", "rank": 156}, {"id": "0xf1cd9ccc49218984a087f7abc5798b6b690be9d2", "x": 813.707764910778, "y": 8.193007706833862, "size": 15, "percentage": 0.12444252709332507, "quantity_eth": 1232138.3269138914, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 156, "is_whale": false, "whale_value": "", "rank": 157}, {"id": "0x88bb67d8fff72a6a3043f30a204daf404bd7242d", "x": 487.19286745742795, "y": 689.9344408472015, "size": 15, "percentage": 0.11724022321686352, "quantity_eth": 1160826.4140529963, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 161, "is_whale": false, "whale_value": "", "rank": 162}, {"id": "0x2d474f086692fa9675499f4dd50b4bcd52a24820", "x": 533.2897301864681, "y": 68.34205579008281, "size": 15, "percentage": 0.11374995924080704, "quantity_eth": 1126268.388622342, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 163, "is_whale": false, "whale_value": "", "rank": 164}, {"id": "0xa14a582cd54730a92fea572d15428f3f7fb3f391", "x": 843.0995766188581, "y": 691.9090170536606, "size": 15, "percentage": 0.1117523496104291, "quantity_eth": 1106489.528088956, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 164, "is_whale": false, "whale_value": "", "rank": 165}, {"id": "0x03e2941e691253208c33f2db290a094c2f61aee5", "x": 334.8658860755799, "y": 20.601213581063064, "size": 15, "percentage": 0.11164821934499813, "quantity_eth": 1105458.506829375, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 165, "is_whale": true, "whale_value": "99k", "rank": 166}, {"id": "0x7784f56ef362afedcd5ee59c5f17474b233f2742", "x": 960.388379206346, "y": 584.5638849717128, "size": 15, "percentage": 0.10887007591564349, "quantity_eth": 1077951.375007753, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 168, "is_whale": false, "whale_value": "", "rank": 169}, {"id": "0x83babdf04ff5b068dfeb75b648b9244866822164", "x": 181.72754083493805, "y": 234.22370750446544, "size": 15, "percentage": 0.1079675595028459, "quantity_eth": 1069015.321643594, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 169, "is_whale": false, "whale_value": "", "rank": 170}, {"id": "0x39a8d889c810908b49d454073af338398e4b66e8", "x": 1037.7016556541435, "y": 333.83644105954073, "size": 15, "percentage": 0.10756916092923853, "quantity_eth": 1065070.6721463904, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 170, "is_whale": false, "whale_value": "", "rank": 171}, {"id": "0x00acd39ee2cd31b41d6104ba9451c9e8aea6a569", "x": 183.87428145805808, "y": 499.0080077309691, "size": 15, "percentage": 0.10400694641916303, "quantity_eth": 1029800.2454757617, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 172, "is_whale": false, "whale_value": "", "rank": 173}, {"id": "0xefd3cf767cd1e755e992c6fcd26ffd8a4eb0df0f", "x": 953.5417616088575, "y": 84.63060118238262, "size": 15, "percentage": 0.10333094034080573, "quantity_eth": 1023106.9307558981, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 174, "is_whale": false, "whale_value": "", "rank": 175}, {"id": "0x000000000000000000000000000000000000dead", "x": 293.456728392099, "y": 690.5552150082981, "size": 15, "percentage": 0.1025272655843925, "quantity_eth": 1015149.5347363902, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 175, "is_whale": false, "whale_value": "", "rank": 176}, {"id": "0xc162976efd9a3eee9aae6225655ad51890e41048", "x": 84.1519077623166, "y": 91.34425888103094, "size": 15, "percentage": 0.10148622490303326, "quantity_eth": 1004841.9160039508, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 176, "is_whale": false, "whale_value": "", "rank": 177}, {"id": "0x059f5d60f1db695bbef01e8e1e94c76652845474", "x": 1002.0275088058522, "y": 380.58520253573573, "size": 15, "percentage": 0.10127647299262485, "quantity_eth": 1002765.106942015, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 178, "is_whale": false, "whale_value": "", "rank": 179}, {"id": "0x31f41b4aa0142dc09c7abe8505cda58fc87cc549", "x": 460.0324953239274, "y": 54.71248299008795, "size": 15, "percentage": 0.10107658103059448, "quantity_eth": 1000785.9238330531, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 179, "is_whale": false, "whale_value": "", "rank": 180}, {"id": "0xdf58ab307715c0e7f3e47bf237541219bf34f3b3", "x": 893.7652426817928, "y": 687.3839597924482, "size": 15, "percentage": 0.10099726558541004, "quantity_eth": 1000000.6006625047, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 183, "is_whale": true, "whale_value": "62k", "rank": 184}, {"id": "0xaa4e242cdce87a2d9323f10311f94aa07f2d5b66", "x": 240.07516424153334, "y": 69.7795508870669, "size": 15, "percentage": 0.10099726243204867, "quantity_eth": 1000000.5694402409, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 184, "is_whale": false, "whale_value": "", "rank": 185}, {"id": "0x7fd643b7da56b3acb6a5a4e83a8818b14f195a50", "x": 1046.5235004440426, "y": 509.0369879971296, "size": 15, "percentage": 0.10099720492017655, "quantity_eth": 1000000.0000000057, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 187, "is_whale": true, "whale_value": "98k", "rank": 188}, {"id": "0xe480c1c6e54a83e11e1de3fc22c520f3af39269c", "x": 122.29629055713815, "y": 333.1724635038336, "size": 15, "percentage": 0.10099720492017597, "quantity_eth": 1000000.0, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 189, "is_whale": true, "whale_value": "77k", "rank": 190}, {"id": "0x32859d1e9b490688de381cda9d1d36776a2bd1dd", "x": 1075.9605854558035, "y": 264.0960256576741, "size": 15, "percentage": 0.10066774539110934, "quantity_eth": 996737.9341900896, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 190, "is_whale": false, "whale_value": "", "rank": 191}, {"id": "0xf8231356eeffca5180f340607e242e7f8a9071ac", "x": 193.12864027333882, "y": 615.803868734407, "size": 15, "percentage": 0.09784133322434979, "quantity_eth": 968752.8808513023, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 193, "is_whale": true, "whale_value": "51k", "rank": 194}, {"id": "0x65e8215a1563385a39c58c4ebd695baccec366ec", "x": 937.5730284908434, "y": 18.217748267417974, "size": 15, "percentage": 0.09585939123815257, "quantity_eth": 949129.149800887, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 197, "is_whale": false, "whale_value": "", "rank": 198}, {"id": "0x0edd14e2488ae7b7d09a99abc8c802a8d13882a1", "x": 1155.7036596342386, "y": 513.0692314355963, "size": 15, "percentage": 0.09481062331856939, "quantity_eth": 938745.0216419732, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 198, "is_whale": true, "whale_value": "48k", "rank": 199}, {"id": "0x14089ee70515bca56ed56aaeb430dbde57147d8f", "x": 1089.2391229188893, "y": 34.20852081359382, "size": 15, "percentage": 0.09467806844227183, "quantity_eth": 937432.5608030586, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 199, "is_whale": false, "whale_value": "", "rank": 200}, {"id": "0x109927555f557ee237eb2aa9a591927b298839ca", "x": 25.11284367701105, "y": 691.9559880613177, "size": 15, "percentage": 0.0926982856135115, "quantity_eth": 917830.2081406749, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 201, "is_whale": false, "whale_value": "", "rank": 202}, {"id": "0x52acabcef6f6b804b96265decf82acfa02571b61", "x": 273.71046509470386, "y": 29.266121954470492, "size": 15, "percentage": 0.0921263153331333, "quantity_eth": 912166.9793332019, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 202, "is_whale": false, "whale_value": "", "rank": 203}, {"id": "0xc906f5d4d42bb20b94821ed4fab3a3ef19a7cab7", "x": 983.0076377231211, "y": 686.7568105410111, "size": 15, "percentage": 0.09157059831548318, "quantity_eth": 906664.6783726026, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 205, "is_whale": false, "whale_value": "", "rank": 206}, {"id": "0xeac60e4a979ba6b8c06e46b1a0d79fa3fc5fd1a7", "x": 129.4813527612713, "y": 143.09856791061884, "size": 15, "percentage": 0.09089748442885488, "quantity_eth": 900000.0000068963, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 207, "is_whale": false, "whale_value": "", "rank": 208}, {"id": "0x76376be1198f15f703abd60a36c48f229fc83b41", "x": 1115.019023720407, "y": 405.49238872204955, "size": 15, "percentage": 0.09074920871434335, "quantity_eth": 898531.8829968391, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 209, "is_whale": false, "whale_value": "", "rank": 210}, {"id": "0x73e4beb8efa0e1e3829f5d5b005d4b178366c763", "x": 88.36513483931174, "y": 453.50731738386565, "size": 15, "percentage": 0.090109390230517, "quantity_eth": 892196.8712078296, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 210, "is_whale": false, "whale_value": "", "rank": 211}, {"id": "0x5e22fc45a6c859f0858e507e5b6c6d4ddfbc30fe", "x": 1074.9442636250217, "y": 94.79954083419707, "size": 15, "percentage": 0.08722483707355524, "quantity_eth": 863636.1485695981, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 213, "is_whale": false, "whale_value": "", "rank": 214}, {"id": "0x703247b11e3ae39e1ca93943d53724fc013107d8", "x": 224.26738672073088, "y": 691.6846874136359, "size": 15, "percentage": 0.08703724448662173, "quantity_eth": 861778.7448218233, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 214, "is_whale": false, "whale_value": "", "rank": 215}, {"id": "0xc70a49d8ad83b1da957782819123b413af114b8c", "x": 869.9650434091012, "y": 9.300079667031554, "size": 15, "percentage": 0.08624190132975941, "quantity_eth": 853903.8421699042, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 215, "is_whale": false, "whale_value": "", "rank": 216}, {"id": "0x2c93e27911c0c516009a685b17b23c23c7bb2e16", "x": 1186.525983060331, "y": 89.33901300641807, "size": 15, "percentage": 0.08589323349931563, "quantity_eth": 850451.5898950086, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 216, "is_whale": false, "whale_value": "", "rank": 217}, {"id": "0x7b883f2b76a27fc9e14114afa1bcdbb0d466e484", "x": 1108.5725428424134, "y": 454.0866522387383, "size": 15, "percentage": 0.08568563406856264, "quantity_eth": 848396.0931026263, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 218, "is_whale": false, "whale_value": "", "rank": 219}, {"id": "0x2344d2bba08b87d1bd1b9c48f0fde4e5115bba22", "x": 1056.987878974367, "y": 650.1967950126162, "size": 15, "percentage": 0.08556136876221529, "quantity_eth": 847165.7094851236, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 219, "is_whale": false, "whale_value": "", "rank": 220}, {"id": "0xdfc958142eec8699a57fc4b48aa89168340a93c0", "x": 214.196431364077, "y": 8.010706233210158, "size": 15, "percentage": 0.08459192454280755, "quantity_eth": 837566.9862316044, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 221, "is_whale": true, "whale_value": "43k", "rank": 222}, {"id": "0x47bcd37cecb593f0c4f35db2174bfaaf8aa868bc", "x": 1089.7468320645135, "y": 608.967257549624, "size": 15, "percentage": 0.08442696424868221, "quantity_eth": 835933.6707922741, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 222, "is_whale": false, "whale_value": "", "rank": 223}, {"id": "0x25ae5d5fad48f0e088904f8d97795fadb9470745", "x": 50.96105030096521, "y": 250.399639993719, "size": 15, "percentage": 0.08404027159415862, "quantity_eth": 832104.9246915358, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 224, "is_whale": false, "whale_value": "", "rank": 225}, {"id": "0x2a2f11f8b85ed7ceef4d1f926c0800d9514a15fc", "x": 1186.416665400294, "y": 286.30910806520427, "size": 15, "percentage": 0.0820672491978996, "quantity_eth": 812569.508856826, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 229, "is_whale": false, "whale_value": "", "rank": 230}, {"id": "0xe7c55cd7a6dc76f349c2aaa25099bc83186c3cb3", "x": 86.57735651056055, "y": 588.2292785371185, "size": 15, "percentage": 0.08203473973099239, "quantity_eth": 812247.6240389947, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 230, "is_whale": false, "whale_value": "", "rank": 231}, {"id": "0x3c594a0b48e25e8bfca24152a02bfff30d5c0c11", "x": 1032.0415984330361, "y": 8.540355728968471, "size": 15, "percentage": 0.08170081886753629, "quantity_eth": 808941.3853790237, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 233, "is_whale": false, "whale_value": "", "rank": 234}, {"id": "0xdcee9dd25a457d024e06f689ac11daabe68bcc7a", "x": 241.5230930945722, "y": 476.1608467029473, "size": 15, "percentage": 0.07979084965762998, "quantity_eth": 790030.2757951904, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 235, "is_whale": true, "whale_value": "94k", "rank": 236}, {"id": "0xcdd20869cd6e3f26f8a4d7eb6fb618926a43d92a", "x": 187.07221746743747, "y": 173.78857141794305, "size": 15, "percentage": 0.07887881704265744, "quantity_eth": 781000.0, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 237, "is_whale": false, "whale_value": "", "rank": 238}, {"id": "0x87689964299f23bba309997f691a7f93eb4896af", "x": 11.724923764099922, "y": 634.591328732335, "size": 15, "percentage": 0.07883013252244198, "quantity_eth": 780517.9617074162, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 238, "is_whale": false, "whale_value": "", "rank": 239}, {"id": "0x421255c07c93dd76b6fbca77612ccd769773b887", "x": 104.0024479536507, "y": 265.2958130265323, "size": 15, "percentage": 0.07870454727482684, "quantity_eth": 779274.5090028153, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 239, "is_whale": false, "whale_value": "", "rank": 240}, {"id": "0x457428b0656a1017b7fc1f3a9744b2579bb5e5d8", "x": 160.1363976317818, "y": 416.9487770420637, "size": 15, "percentage": 0.07807642446843875, "quantity_eth": 773055.2992050338, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 240, "is_whale": true, "whale_value": "39k", "rank": 241}, {"id": "0x132c68083ec5c7bbf0318c4630f2e3f424367d1e", "x": 83.27578050001142, "y": 27.717185972204163, "size": 15, "percentage": 0.07769323949372178, "quantity_eth": 769261.2835684642, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 241, "is_whale": false, "whale_value": "", "rank": 242}, {"id": "0x746e49c3504966a5b97dbf68c68bf1691d03782a", "x": 1192.1161360851859, "y": 547.1590013375362, "size": 15, "percentage": 0.0764580472974092, "quantity_eth": 757031.3194096658, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 244, "is_whale": false, "whale_value": "", "rank": 245}, {"id": "0x28aa138b916c1515b0ce9516bd6563a124c290c2", "x": 8.922488736102652, "y": 365.99353480114155, "size": 15, "percentage": 0.07615043810238634, "quantity_eth": 753985.5995279524, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 245, "is_whale": false, "whale_value": "", "rank": 246}, {"id": "0x9ce9ad2ec59f5e0e19f5d1b488378fff6ae8e6cd", "x": 1166.657923539496, "y": 135.2098752504984, "size": 15, "percentage": 0.07574790369013198, "quantity_eth": 750000.0000000001, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 246, "is_whale": false, "whale_value": "", "rank": 247}, {"id": "0x427af46e07e7f88bcca15230461111f4e83e99f5", "x": 99.08905362952132, "y": 689.4769594711365, "size": 15, "percentage": 0.07563744186361009, "quantity_eth": 748906.288281847, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 247, "is_whale": false, "whale_value": "", "rank": 248}, {"id": "0x4d89b82f047f5ee920ae5bf9092179ea3c6cf1f7", "x": 1021.7955779472801, "y": 273.7513348020564, "size": 15, "percentage": 0.07520862111778186, "quantity_eth": 744660.4208227708, "color": "#888888", "group": "Standalone Wallet", "funding_address": null, "index": 249, "is_whale": false, "whale_value": "", "rank": 250}];
+                const connections = [{"x1": 610.3156056953865, "y1": 356.4863829268503, "x2": 616.3512324761028, "y2": 364.0314845352911, "color": "#FF6B6B"}, {"x1": 630.143119840904, "y1": 380.2600868791589, "x2": 616.3512324761028, "y2": 364.0314845352911, "color": "#FF6B6B"}, {"x1": 581.6555386453263, "y1": 361.5728668930218, "x2": 616.3512324761028, "y2": 364.0314845352911, "color": "#FF6B6B"}, {"x1": 599.8732343149542, "y1": 328.71504602384516, "x2": 616.3512324761028, "y2": 364.0314845352911, "color": "#FF6B6B"}, {"x1": 641.2375979135903, "y1": 348.2504617727026, "x2": 616.3512324761028, "y2": 364.0314845352911, "color": "#FF6B6B"}, {"x1": 634.8822984464556, "y1": 408.9040627161679, "x2": 616.3512324761028, "y2": 364.0314845352911, "color": "#FF6B6B"}, {"x1": 554.402075329205, "y1": 329.4858764331376, "x2": 556.9381593212834, "y2": 335.0604718322619, "color": "#4ECDC4"}, {"x1": 552.6425833480571, "y1": 363.374871644033, "x2": 556.9381593212834, "y2": 335.0604718322619, "color": "#4ECDC4"}, {"x1": 525.741893748963, "y1": 334.4320405822083, "x2": 556.9381593212834, "y2": 335.0604718322619, "color": "#4ECDC4"}, {"x1": 540.9420229212601, "y1": 303.6659622800447, "x2": 556.9381593212834, "y2": 335.0604718322619, "color": "#4ECDC4"}, {"x1": 576.6499092170538, "y1": 309.5928741680594, "x2": 556.9381593212834, "y2": 335.0604718322619, "color": "#4ECDC4"}, {"x1": 568.8131425836328, "y1": 390.79511750688766, "x2": 556.9381593212834, "y2": 335.0604718322619, "color": "#4ECDC4"}, {"x1": 513.5379378537461, "y1": 360.799130810692, "x2": 556.9381593212834, "y2": 335.0604718322619, "color": "#4ECDC4"}, {"x1": 532.5645694629661, "y1": 274.6450241630358, "x2": 556.9381593212834, "y2": 335.0604718322619, "color": "#4ECDC4"}, {"x1": 604.6506400749099, "y1": 296.49243180463986, "x2": 556.9381593212834, "y2": 335.0604718322619, "color": "#4ECDC4"}, {"x1": 599.4368186730396, "y1": 387.3213889298804, "x2": 556.9381593212834, "y2": 335.0604718322619, "color": "#4ECDC4"}, {"x1": 517.7503567999422, "y1": 406.877026939382, "x2": 522.2964236288931, "y2": 420.7334349374824, "color": "#98D8C8"}, {"x1": 535.6944653332837, "y1": 430.86313156036977, "x2": 522.2964236288931, "y2": 420.7334349374824, "color": "#98D8C8"}, {"x1": 491.6390090752359, "y1": 420.069184592172, "x2": 522.2964236288931, "y2": 420.7334349374824, "color": "#98D8C8"}, {"x1": 494.99029985247813, "y1": 386.11001740848224, "x2": 522.2964236288931, "y2": 420.7334349374824, "color": "#98D8C8"}, {"x1": 567.2917599330503, "y1": 421.6046997150261, "x2": 522.2964236288931, "y2": 420.7334349374824, "color": "#98D8C8"}, {"x1": 526.4126507793684, "y1": 458.8765494094626, "x2": 522.2964236288931, "y2": 420.7334349374824, "color": "#98D8C8"}, {"x1": 708.1782986588975, "y1": 330.0637089892233, "x2": 717.9247566917381, "y2": 341.97892126949745, "color": "#F7DC6F"}, {"x1": 727.6712147245787, "y1": 353.8941335497716, "x2": 717.9247566917381, "y2": 341.97892126949745, "color": "#F7DC6F"}, {"x1": 466.37599765651055, "y1": 180.2925281618186, "x2": 463.71040770077747, "y2": 189.9749707202749, "color": "#FF6B6B"}, {"x1": 487.0343948036518, "y1": 203.8887959050884, "x2": 463.71040770077747, "y2": 189.9749707202749, "color": "#FF6B6B"}, {"x1": 437.72083064217003, "y1": 185.74358809391782, "x2": 463.71040770077747, "y2": 189.9749707202749, "color": "#FF6B6B"}];
+                const chart = document.getElementById('bubble-chart');
+                const tooltip = document.getElementById('tooltip');
+
+                const resetButton = document.querySelector('.header-controls .reset-button');
+                let canvasContainer; // Global reference to the infinite canvas
+                
+                // Interactive state variables
+                let isDragging = false;
+                let isPanning = false;
+                let dragStartX = 0, dragStartY = 0;
+                let panStartX = 0, panStartY = 0;
+                let scale = 1; // Zoom scale
+                let dragDistance = 0; // Track drag distance to prevent click after drag
+                // Center the view on the bubbles (bubbles are at 600,350 in the large canvas), but move view up
+                let translateX = -600 + (window.innerWidth - 320) / 2, translateY = -350 + window.innerHeight / 2 - 100;
+                let draggedBubble = null;
+                let bubbleElements = [];
+                let connectionElements = [];
+                
+                console.log('Bubbles data:', bubbles);
+                console.log('Connections data:', connections);
+                
+                // Physics and collision detection - STRICT NO OVERLAP
+                function checkCollision(bubble1, bubble2) {
+                    const dx = bubble1.x - bubble2.x;
+                    const dy = bubble1.y - bubble2.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const minDistance = (bubble1.size + bubble2.size) / 2 + 5; // Strict minimum distance with 5px buffer
+                    return distance < minDistance;
+                }
+                
+                function resolveCollision(bubble1, bubble2) {
+                    const dx = bubble2.x - bubble1.x;
+                    const dy = bubble2.y - bubble1.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance === 0) {
+                        // If bubbles are exactly on top of each other, move one randomly
+                        const randomAngle = Math.random() * 2 * Math.PI;
+                        const moveDistance = (bubble1.size + bubble2.size) / 2 + 10;
+                        bubble2.x += Math.cos(randomAngle) * moveDistance;
+                        bubble2.y += Math.sin(randomAngle) * moveDistance;
+                        if (bubble2 !== draggedBubble) {
+                            updateBubblePosition(bubble2);
+                        }
+                        return;
+                    }
+                    
+                    const minDistance = (bubble1.size + bubble2.size) / 2 + 5;
+                    const overlap = minDistance - distance;
+                    const moveX = (dx / distance) * overlap;
+                    const moveY = (dy / distance) * overlap;
+                    
+                    // Move both bubbles apart equally to prevent overlap
+                    if (bubble1 !== draggedBubble) {
+                        bubble1.x -= moveX * 0.5;
+                        bubble1.y -= moveY * 0.5;
+                        updateBubblePosition(bubble1);
+                    }
+                    if (bubble2 !== draggedBubble) {
+                        bubble2.x += moveX * 0.5;
+                        bubble2.y += moveY * 0.5;
+                        updateBubblePosition(bubble2);
+                    }
+                }
+                
+                function preventAllCollisions() {
+                    let hasCollisions = true;
+                    let iterations = 0;
+                    const maxIterations = 50;
+                    
+                    while (hasCollisions && iterations < maxIterations) {
+                        hasCollisions = false;
+                        iterations++;
+                        
+                        for (let i = 0; i < bubbles.length; i++) {
+                            for (let j = i + 1; j < bubbles.length; j++) {
+                                if (checkCollision(bubbles[i], bubbles[j])) {
+                                    resolveCollision(bubbles[i], bubbles[j]);
+                                    hasCollisions = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                function updateBubblePosition(bubble) {
+                    const element = bubbleElements.find(el => el.dataset.bubbleId === bubble.id);
+                    if (element) {
+                        element.style.left = (bubble.x - bubble.size/2) + 'px';
+                        element.style.top = (bubble.y - bubble.size/2) + 'px';
+                    }
+                }
+                
+                function updateConnections() {
+                    // Remove existing connections
+                    connectionElements.forEach(el => el.remove());
+                    connectionElements = [];
+                    
+                    // Group bubbles by funding address
+                    const groupedBubbles = {};
+                    bubbles.forEach(bubble => {
+                        if (bubble.funding_address) {
+                            if (!groupedBubbles[bubble.funding_address]) {
+                                groupedBubbles[bubble.funding_address] = [];
+                            }
+                            groupedBubbles[bubble.funding_address].push(bubble);
+                        }
+                    });
+                    
+                    // Create connections for each group
+                    Object.values(groupedBubbles).forEach(groupBubbles => {
+                        if (groupBubbles.length > 1) {
+                            // Calculate group center based on current bubble positions
+                            const centerX = groupBubbles.reduce((sum, b) => sum + b.x, 0) / groupBubbles.length;
+                            const centerY = groupBubbles.reduce((sum, b) => sum + b.y, 0) / groupBubbles.length;
+                            
+                            // Connect each bubble to center
+                            groupBubbles.forEach(bubble => {
+                                const dx = centerX - bubble.x;
+                                const dy = centerY - bubble.y;
+                                const distance = Math.sqrt(dx * dx + dy * dy);
+                                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                                
+                                const line = document.createElement('div');
+                                line.className = 'connection';
+                                line.style.width = distance + 'px';
+                                line.style.left = bubble.x + 'px';
+                                line.style.top = (bubble.y - 2) + 'px';
+                                line.style.transform = `rotate(${angle}deg)`;
+                                line.style.background = bubble.color;
+                                line.style.opacity = '0.8';
+                                line.style.zIndex = '999';
+                                line.style.transition = 'none'; // Disable transitions for real-time updates
+                                line.style.position = 'absolute'; // Ensure absolute positioning
+                                
+                                // Append to canvas container instead of chart for proper positioning
+                                canvasContainer.appendChild(line);
+                                connectionElements.push(line);
+                            });
+                        }
+                    });
+                    
+                    console.log('Updated connections for', Object.keys(groupedBubbles).length, 'groups');
+                }
+                
+                // Initialize visualization
+                function initVisualization() {
+                    // Create infinite canvas container
+                    canvasContainer = document.createElement('div');
+                    canvasContainer.className = 'bubble-canvas';
+                    canvasContainer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+                    chart.appendChild(canvasContainer);
+                    
+                    console.log('Canvas container created:', canvasContainer);
+                    
+                    // Create bubble elements
+                    bubbles.forEach(bubble => {
+                        const element = document.createElement('div');
+                        element.className = 'bubble';
+                        element.style.width = bubble.size + 'px';
+                        element.style.height = bubble.size + 'px';
+                        element.style.left = (bubble.x - bubble.size/2) + 'px';
+                        element.style.top = (bubble.y - bubble.size/2) + 'px';
+                        element.style.backgroundColor = bubble.color;
+                        element.dataset.bubbleId = bubble.id;
+                        
+                        // Add event listeners for dragging
+                        element.addEventListener('mousedown', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation(); // Prevent panning when dragging bubbles
+                            isDragging = true;
+                            draggedBubble = bubble;
+                            dragStartX = e.clientX - bubble.x;
+                            dragStartY = e.clientY - bubble.y;
+                            dragDistance = 0; // Reset drag distance
+                            element.classList.add('dragging');
+                            element.style.transition = 'none';
+                        });
+                        
+                        // Add whale emoji to bubble if it's a whale
+                        if (bubble.is_whale) {
+                            const whaleEmoji = document.createElement('div');
+                            whaleEmoji.textContent = '🐋';
+                            whaleEmoji.style.position = 'absolute';
+                            whaleEmoji.style.top = '50%';
+                            whaleEmoji.style.left = '50%';
+                            whaleEmoji.style.transform = 'translate(-50%, -50%)';
+                            whaleEmoji.style.fontSize = Math.max(8, bubble.size * 0.3) + 'px'; // Scale with bubble size
+                            whaleEmoji.style.zIndex = '1001';
+                            whaleEmoji.style.pointerEvents = 'none';
+                            whaleEmoji.style.textAlign = 'center';
+                            whaleEmoji.style.lineHeight = '1';
+                            element.appendChild(whaleEmoji);
+                        }
+                        
+                        // Add tooltip with enhanced info
+                        element.addEventListener('mouseenter', (e) => {
+                            tooltip.style.display = 'block';
+                            tooltip.style.left = e.pageX + 10 + 'px';
+                            tooltip.style.top = e.pageY - 10 + 'px';
+                            
+                            // Get rank from bubble data
+                            const rank = bubble.rank || 'N/A';
+                            
+                            // Get whale info
+                            const whaleInfo = bubble.is_whale ? `🐋 Whale: ${bubble.whale_value || 'N/A'}` : '';
+                            
+                            // Calculate USD value for this specific wallet
+                            const walletUSDValue = calculateWalletUSDValue(bubble.quantity_eth, document.getElementById('priceUsdMain')?.textContent || 'N/A');
+                            
+                            tooltip.innerHTML = `
+                                Rank: #${rank}<br>
+                                Address: ${bubble.id}<br>
+                                Percentage: ${bubble.percentage.toFixed(2)}%<br>
+                                Quantity: ${bubble.quantity_eth.toLocaleString()} tokens<br>
+                                Value: ${walletUSDValue}<br>
+                                ${whaleInfo}
+                            `;
+                        });
+                        
+                        element.addEventListener('mouseleave', () => {
+                            tooltip.style.display = 'none';
+                        });
+                        
+                        // Add click event to open AbScan in new tab
+                        element.addEventListener('click', (e) => {
+                            e.stopPropagation(); // Prevent triggering pan
+                            // Only open AbScan if the bubble wasn't dragged significantly
+                            if (dragDistance < 5) {
+                                window.open(`https://abscan.org/address/${bubble.id}`, '_blank');
+                            }
+                        });
+                        
+                        canvasContainer.appendChild(element);
+                        bubbleElements.push(element);
+                    });
+                    
+                    // Create initial connections
+                    updateConnections();
+                    
+                    // Apply collision prevention
+                    preventAllCollisions();
+                }
+                
+                // Mouse event handlers
+                document.addEventListener('mousemove', (e) => {
+                    if (isDragging && draggedBubble) {
+                        const newX = e.clientX - dragStartX;
+                        const newY = e.clientY - dragStartY;
+                        
+                        // Calculate drag distance
+                        const deltaX = newX - draggedBubble.x;
+                        const deltaY = newY - draggedBubble.y;
+                        dragDistance += Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                        
+                        draggedBubble.x = newX;
+                        draggedBubble.y = newY;
+                        
+                        const element = bubbleElements.find(el => el.dataset.bubbleId === draggedBubble.id);
+                        if (element) {
+                            element.style.left = (draggedBubble.x - draggedBubble.size/2) + 'px';
+                            element.style.top = (draggedBubble.y - draggedBubble.size/2) + 'px';
+                        }
+                        
+                        // Update connections immediately during dragging for smooth movement
+                        updateConnections();
+                        
+                        // Prevent collisions during dragging
+                        preventAllCollisions();
+                    } else if (isPanning) {
+                        translateX += e.clientX - panStartX;
+                        translateY += e.clientY - panStartY;
+                        panStartX = e.clientX;
+                        panStartY = e.clientY;
+                        
+                        if (canvasContainer) {
+                            canvasContainer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+                        }
+                    }
+                });
+                
+                document.addEventListener('mouseup', () => {
+                    if (isDragging && draggedBubble) {
+                        const element = bubbleElements.find(el => el.dataset.bubbleId === draggedBubble.id);
+                        if (element) {
+                            element.classList.remove('dragging');
+                            element.style.transition = 'all 0.3s ease';
+                        }
+                        isDragging = false;
+                        draggedBubble = null;
+                        
+                        // Final collision prevention and connection update
+                        preventAllCollisions();
+                        updateConnections();
+                    }
+                    if (isPanning) {
+                        chart.style.cursor = 'grab';
+                        console.log('Panning stopped');
+                    }
+                    isPanning = false;
+                });
+                
+                // Pan functionality
+                chart.addEventListener('mousedown', (e) => {
+                    if (e.target === chart || e.target === canvasContainer) {
+                        isPanning = true;
+                        panStartX = e.clientX;
+                        panStartY = e.clientY;
+                        chart.style.cursor = 'grabbing';
+                        console.log('Panning started');
+                    }
+                });
+                
+                // Zoom functionality removed - keeping only pan and drag
+                
+                // Reset button functionality
+                resetButton.addEventListener('click', () => {
+                    scale = 1;
+                    // Reset to the same initial position as page load
+                    translateX = -600 + (window.innerWidth - 320) / 2;
+                    translateY = -350 + window.innerHeight / 2 - 100;
+                    canvasContainer.style.transform = `translate(${translateX}px, ${translateY}px) scale(1)`;
+                    
+                    // Re-apply collision prevention and update connections
+                    preventAllCollisions();
+                    updateConnections();
+                });
+                
+
+                
+                // Fetch token data from DexScreener API
+                async function fetchTokenData() {
+                    try {
+                        console.log('Fetching token data from DexScreener...');
+                        const response = await fetch('https://api.dexscreener.com/tokens/v1/abstract/0x987CF44F3F5d854eC0703123d7fD003a8b56eBb4');
+                        const data = await response.json();
+                        
+                        console.log('API Response:', data);
+                        
+                        if (data && data.length > 0) {
+                            const token = data[0];
+                            const baseToken = token.baseToken;
+                            const info = token.info;
+                            
+                            console.log('Token data received:', baseToken.name, baseToken.symbol);
+                            
+                            // Update token info
+                            document.getElementById('tokenNameMain').textContent = baseToken.name || 'Unknown';
+                            document.getElementById('tokenSymbolMain').textContent = baseToken.symbol || 'Unknown';
+                            
+                            // Update holdings header with token symbol
+                            document.getElementById('holdingsHeader').textContent = (baseToken.symbol || 'Unknown') + ' Holdings';
+                            
+                            // Update token image if available
+                            if (info?.imageUrl) {
+                                const tokenImageMain = document.getElementById('tokenImageMain');
+                                tokenImageMain.src = info.imageUrl;
+                                tokenImageMain.style.display = 'block';
+                            } else {
+                                // Use the default image we already have in the HTML
+                                const tokenImageMain = document.getElementById('tokenImageMain');
+                                tokenImageMain.style.display = 'block';
+                            }
+                            
+                            // Update metrics
+                            const marketCap = token.marketCap ? (token.marketCap >= 1000000 ? 
+                                `$${(token.marketCap / 1000000).toFixed(1)}M` : 
+                                `$${(token.marketCap / 1000).toFixed(0)}k`) : 'N/A';
+                            const fdv = token.fdv ? (token.fdv >= 1000000 ? 
+                                `$${(token.fdv / 1000000).toFixed(1)}M` : 
+                                `$${(token.fdv / 1000).toFixed(0)}k`) : 'N/A';
+                            const priceUsd = token.priceUsd ? `$${parseFloat(token.priceUsd).toFixed(6)}` : 'N/A';
+                            const volume24h = token.volume?.h24 ? `$${(token.volume.h24 / 1000).toFixed(1)}K` : 'N/A';
+                            
+                            console.log('Metrics calculated:', { marketCap, priceUsd, volume24h });
+                            
+                            // Calculate total USD value of all wallets
+                            const totalUSDValue = calculateTotalUSDValue(token.priceUsd);
+                            
+                            // Update main token analysis elements
+                            document.getElementById('marketCapMain').textContent = marketCap;
+                            document.getElementById('priceUsdMain').textContent = priceUsd;
+                            document.getElementById('volume24hMain').textContent = volume24h;
+                            
+                            // Refresh holders list to update USD values with new price
+                            if (priceUsd && priceUsd !== 'N/A') {
+                                setTimeout(() => {
+                                    populateHoldersList();
+                                }, 500);
+                            }
+                            
+                            // Add total USD value to the token analysis panel
+                            document.getElementById('totalUSDValueMain').textContent = totalUSDValue;
+                            
+                            // Update main links
+                            const linksContainerMain = document.getElementById('tokenLinksMain');
+                            linksContainerMain.innerHTML = '';
+                            
+                            if (info?.websites) {
+                                info.websites.forEach(website => {
+                                    const link = document.createElement('a');
+                                    link.href = website.url;
+                                    link.className = 'token-link-main';
+                                    link.target = '_blank';
+                                    link.textContent = website.label || 'Website';
+                                    linksContainerMain.appendChild(link);
+                                });
+                            }
+                            
+                            if (info?.socials) {
+                                info.socials.forEach(social => {
+                                    const link = document.createElement('a');
+                                    link.href = social.url;
+                                    link.className = 'token-link-main';
+                                    link.target = '_blank';
+                                    link.textContent = social.type === 'twitter' ? 'X/Twitter' : 
+                                                     social.type === 'discord' ? 'Discord' : social.type;
+                                    linksContainerMain.appendChild(link);
+                                });
+                            }
+                            
+                            // Add DexScreener link
+                            const dexLink = document.createElement('a');
+                            dexLink.href = token.url;
+                            dexLink.className = 'token-link-main';
+                            dexLink.target = '_blank';
+                            dexLink.textContent = 'DexScreener';
+                            linksContainerMain.appendChild(dexLink);
+                        }
+                    } catch (error) {
+                        console.error('Error fetching token data:', error);
+                        document.getElementById('tokenName').textContent = 'Error loading data';
+                    }
+                }
+                
+                // Populate holders list with click functionality
+                function populateHoldersList() {
+                    const holdersContainer = document.getElementById('holdersList');
+                    holdersContainer.innerHTML = '';
+                    
+                    // Sort bubbles by percentage (descending)
+                    const sortedBubbles = [...bubbles].sort((a, b) => b.percentage - a.percentage);
+                    
+                    // Show all 250 holders
+                    sortedBubbles.forEach((bubble, index) => {
+                        const holderItem = document.createElement('div');
+                        holderItem.className = 'holder-item';
+                        holderItem.dataset.address = bubble.id;
+                        holderItem.style.cursor = 'pointer';
+                        
+                        const isCluster = bubble.funding_address && bubbles.filter(b => b.funding_address === bubble.funding_address).length > 1;
+                        const isWhale = bubble.is_whale || false;
+                        const whaleValue = bubble.whale_value || '';
+                        
+                        // Calculate USD value for this holder - improved price detection
+                        const priceElement = document.getElementById('priceUsdMain');
+                        const priceText = priceElement ? priceElement.textContent : '';
+                        let holderUSDValue = calculateWalletUSDValue(bubble.quantity_eth, priceText);
+                        
+                        // If price is not available yet, show a placeholder
+                        if (holderUSDValue === 'N/A' && (priceText === 'Loading...' || !priceText)) {
+                            holderUSDValue = 'Loading...';
+                        }
+                        
+                        holderItem.innerHTML = 
+                            '<div class="holder-address">#' + (index + 1) + ' <a href="https://abscan.org/address/' + bubble.id + '" target="_blank" class="address-link">' + bubble.id.substring(0, 8) + '...</a></div>' +
+                            '<div class="holder-percentage">' +
+                                bubble.percentage.toFixed(2) + '%' +
+                                (isCluster ? '<span class="cluster-indicator">CLUSTER</span>' : '') +
+                                (isWhale ? '<span class="whale-indicator">🐋 ' + whaleValue + '</span>' : '') +
+                            '</div>' +
+                            '<div class="holder-quantity">' + bubble.quantity_eth.toLocaleString() + ' tokens</div>' +
+                            '<div class="holder-value">' + holderUSDValue + '</div>';
+                        
+                        // Add click event to highlight bubble and open AbScan
+                        holderItem.addEventListener('click', () => {
+                            highlightBubble(bubble.id);
+                            window.open(`https://abscan.org/address/${bubble.id}`, '_blank');
+                        });
+                        
+                        holdersContainer.appendChild(holderItem);
+                    });
+                }
+                
+                // Function to calculate total USD value of all wallets
+                function calculateTotalUSDValue(tokenPrice) {
+                    if (!tokenPrice || tokenPrice === 'N/A') return 'N/A';
+                    
+                    const price = parseFloat(tokenPrice);
+                    if (isNaN(price)) return 'N/A';
+                    
+                    let totalTokens = 0;
+                    bubbles.forEach(bubble => {
+                        totalTokens += bubble.quantity_eth;
+                    });
+                    
+                    const totalUSD = totalTokens * price;
+                    
+                    // Format the total value
+                    if (totalUSD >= 1000000) {
+                        return `$${(totalUSD / 1000000).toFixed(2)}M`;
+                    } else if (totalUSD >= 1000) {
+                        return `$${(totalUSD / 1000).toFixed(1)}K`;
+                    } else {
+                        return `$${totalUSD.toFixed(2)}`;
+                    }
+                }
+                
+                // Function to calculate USD value for a specific wallet
+                function calculateWalletUSDValue(quantity, tokenPrice) {
+                    if (!tokenPrice || tokenPrice === 'Loading...' || tokenPrice === 'N/A' || !quantity) return 'N/A';
+                    
+                    // Extract price from various formats
+                    let priceStr = tokenPrice.replace('$', '').trim();
+                    if (priceStr.includes('Loading...')) return 'N/A';
+                    
+                    const price = parseFloat(priceStr);
+                    if (isNaN(price) || price <= 0) return 'N/A';
+                    
+                    const walletUSD = quantity * price;
+                    
+                    // Format the wallet value
+                    if (walletUSD >= 1000000) {
+                        return `$${(walletUSD / 1000000).toFixed(2)}M`;
+                    } else if (walletUSD >= 1000) {
+                        return `$${(walletUSD / 1000).toFixed(1)}K`;
+                    } else {
+                        return `$${walletUSD.toFixed(2)}`;
+                    }
+                }
+                
+                // Function to highlight a bubble when clicked in the table
+                function highlightBubble(address) {
+                    // Remove previous highlights
+                    bubbleElements.forEach(el => {
+                        el.style.boxShadow = '';
+                        el.style.border = '';
+                        el.style.zIndex = '';
+                    });
+                    
+                    // Find and highlight the target bubble
+                    const targetElement = bubbleElements.find(el => el.dataset.bubbleId === address);
+                    if (targetElement) {
+                        targetElement.style.boxShadow = '0 0 20px 5px #00ff00, 0 0 30px 10px #00ff00';
+                        targetElement.style.border = '3px solid #00ff00';
+                        targetElement.style.zIndex = '1000';
+                        
+                        // Remove highlight after 3 seconds
+                        setTimeout(() => {
+                            targetElement.style.boxShadow = '';
+                            targetElement.style.border = '';
+                            targetElement.style.zIndex = '';
+                        }, 3000);
+                    }
+                }
+                
+                // Initialize
+                initVisualization();
+                
+                // Initialize token display with default values
+                document.getElementById('tokenNameMain').textContent = 'PREDIQT';
+                document.getElementById('tokenSymbolMain').textContent = 'PRQT';
+                document.getElementById('holdingsHeader').textContent = 'PRQT Holdings';
+                
+                // Fetch token data and populate sidebar and mini popup
+                fetchTokenData();
+                populateHoldersList();
+                
+                // Auto-refresh token data every 1 minute
+                setInterval(() => {
+                    console.log('Auto-refreshing token data...');
+                    fetchTokenData();
+                    // Refresh holders list to update USD values
+                    setTimeout(() => {
+                        populateHoldersList();
+                    }, 1000);
+                }, 60000);
+                
+                // Function to refresh holders list with updated prices
+                function refreshHoldersList() {
+                    populateHoldersList();
+                } // 60 seconds = 1 minute
+                
+                // Update mini token popup
+                function updateMiniTokenPopup() {
+                    // This will be called after fetchTokenData() populates the data
+                    // Since we removed the sidebar token info, we'll get data from the API response
+                    // The fetchTokenData function will handle updating the mini popup directly
+                }
+                
+                // Call update after a short delay to ensure data is loaded
+                setTimeout(updateMiniTokenPopup, 1000);
+            </script>
+        </body>
+        </html>
+        

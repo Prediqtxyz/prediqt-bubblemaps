@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediqt Bubble Maps</title>
+    <link rel="icon" type="image/png" href="https://backend.prediqt.xyz/11111.png">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-900: #04060A;
+            --bg-800: #0B1118;
+            --bg-700: #1a2332;
+            --bg-600: #2a3342;
+            --card-800: #0F1622;
+            --text-100: #E6F0FF;
+            --text-300: #B8C5D6;
+            --text-400: #93A0B4;
+            --line: #223044;
+            --cyan: #34D6FF;
+            --green: #2EE6A0;
+            --red: #FF6B6B;
+            --purple: #7A5CFF;
+            --bronze: #E59A3B;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            background: 
+                radial-gradient(ellipse at top, #1a2332 0%, #0f1419 25%, #04060A 100%),
+                linear-gradient(135deg, #04060A 0%, #0B1118 50%, #04060A 100%);
+            color: var(--text-100);
+            font-family: "Exo 2", system-ui, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Starfield Background */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(1px 1px at 25px 25px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 50px 50px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 75px 75px, rgba(255,255,255,0.4), transparent),
+                radial-gradient(1px 1px at 100px 100px, rgba(255,255,255,0.3), transparent),
+                radial-gradient(1px 1px at 125px 125px, rgba(255,255,255,0.2), transparent),
+                radial-gradient(1px 1px at 150px 150px, rgba(255,255,255,0.1), transparent);
+            background-repeat: repeat;
+            background-size: 150px 150px;
+            animation: twinkle 30s linear infinite;
+            z-index: -1;
+            opacity: 0.6;
+        }
+        
+        @keyframes twinkle {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-150px); }
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px;
+            background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.1)), var(--card-800);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        .header h1 {
+            font-family: "Orbitron", monospace;
+            font-size: 3em;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(135deg, var(--cyan), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(52, 214, 255, 0.3);
+        }
+        
+        .header p {
+            margin: 20px 0 0 0;
+            font-size: 1.3em;
+            color: var(--text-300);
+            font-weight: 500;
+        }
+        
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .analysis-item {
+            background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.1)), var(--card-800);
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .analysis-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyan), var(--purple));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .analysis-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            border-color: var(--cyan);
+        }
+        
+        .analysis-item:hover::before {
+            opacity: 1;
+        }
+        
+        .analysis-item a {
+            color: var(--cyan);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2em;
+            display: block;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .analysis-item a:hover {
+            color: var(--purple);
+            text-shadow: 0 0 20px rgba(52, 214, 255, 0.5);
+        }
+        
+        .token-address {
+            font-family: "Orbitron", monospace;
+            background: rgba(52, 214, 255, 0.1);
+            border: 1px solid rgba(52, 214, 255, 0.3);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            margin: 15px 0;
+            color: var(--cyan);
+            word-break: break-all;
+        }
+        
+        .timestamp {
+            color: var(--text-400);
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--green), #1a8f5a);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="starfield"></div>
+    <div class="container">
+        <div class="header">
+            <h1>🐋 Prediqt Bubble Maps</h1>
+            <p>Interactive token analysis visualizations</p>
+        </div>
+
+        <div class="analysis-grid">
+
+            <div class="analysis-item">
+                <div class="status-badge">📊 Live Analysis</div>
+                <a href="token_analysis_0xc325b7e2736A5202bd860F5974D0AA375E57EdE5_TEST_TOKEN_2_20250817_194501.html">View Bubble Map</a>
+                <div class="token-address">0xc325b7e2736A5202bd860F5974D0AA375E57EdE5_TEST_TOKEN_2_20250817_194501</div>
+                <div class="timestamp">Generated: August 17, 2025 at 08:20 PM</div>
+            </div>
+
+            <div class="analysis-item">
+                <div class="status-badge">📊 Live Analysis</div>
+                <a href="token_analysis_0xdAC17F958D2ee523a2206206994597C13D831ec7_USDT_20250817_193511.html">View Bubble Map</a>
+                <div class="token-address">0xdAC17F958D2ee523a2206206994597C13D831ec7_USDT_20250817_193511</div>
+                <div class="timestamp">Generated: August 17, 2025 at 08:20 PM</div>
+            </div>
+
+            <div class="analysis-item">
+                <div class="status-badge">📊 Live Analysis</div>
+                <a href="token_analysis_0xfe6371682f58b610e7A2Da97a0df2Cfd45D60Cf1_TEST_20250817_193002.html">View Bubble Map</a>
+                <div class="token-address">0xfe6371682f58b610e7A2Da97a0df2Cfd45D60Cf1_TEST_20250817_193002</div>
+                <div class="timestamp">Generated: August 17, 2025 at 08:20 PM</div>
+            </div>
+
+            <div class="analysis-item">
+                <div class="status-badge">📊 Live Analysis</div>
+                <a href="token_analysis_0xc325b7e2736A5202bd860F5974D0AA375E57EdE5_FINAL_TEST_20250817_194813.html">View Bubble Map</a>
+                <div class="token-address">0xc325b7e2736A5202bd860F5974D0AA375E57EdE5_FINAL_TEST_20250817_194813</div>
+                <div class="timestamp">Generated: August 17, 2025 at 08:20 PM</div>
+            </div>
+
+            <div class="analysis-item">
+                <div class="status-badge">📊 Live Analysis</div>
+                <a href="token_analysis_0x987CF44F3F5d854eC0703123d7fD003a8b56eBb4_FINAL_20250817_195132.html">View Bubble Map</a>
+                <div class="token-address">0x987CF44F3F5d854eC0703123d7fD003a8b56eBb4_FINAL_20250817_195132</div>
+                <div class="timestamp">Generated: August 17, 2025 at 08:20 PM</div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
